@@ -1,0 +1,6 @@
+{
+  "name": "Forcé Pulso",
+  "description": "Monitoreo colaborativo de precios locales y servicio de delivery impulsado por la comunidad.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
