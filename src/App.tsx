@@ -31,6 +31,7 @@ import {
 
 import { Product, Store, CartItem, ExchangeRate, MapPoint } from './types';
 import { INITIAL_PRODUCTS, STORES, INITIAL_STORE_PRICES, StoreDefinition } from './data';
+import { supabase } from './supabase';
 
 export default function App() {
   // Application state
@@ -91,6 +92,127 @@ export default function App() {
   const [reportingStockStatus, setReportingStockStatus] = useState<'DISPONIBLE' | 'POCAS UNIDADES' | 'AGOTADO'>('DISPONIBLE');
   const [reportingStockCount, setReportingStockCount] = useState<string>('');
 
+  // Supabase Online sync state
+  const [supabaseConnected, setSupabaseConnected] = useState<boolean>(false);
+  const [supabaseLoading, setSupabaseLoading] = useState<boolean>(true);
+
+  // Timeago formatter helper
+  const formatTimeAgo = (date: Date) => {
+    const seconds = Math.floor((new Date().getTime() - date.getTime()) / 1000);
+    if (seconds < 60) return 'Justo ahora';
+    const minutes = Math.floor(seconds / 60);
+    if (minutes < 60) return `hace ${minutes} min`;
+    const hours = Math.floor(minutes / 60);
+    if (hours < 24) return `hace ${hours} hora${hours > 1 ? 's' : ''}`;
+    return `hace ${Math.floor(hours / 24)} día${Math.floor(hours / 24) > 1 ? 's' : ''}`;
+  };
+
+  // 1. Initial Load from Supabase with graceful client-side fallback
+  useEffect(() => {
+    async function loadData() {
+      try {
+        setSupabaseLoading(true);
+        // Test connection & fetch stores
+        const { data: storesData, error: storesError } = await supabase.from('stores').select('*');
+        if (storesError) throw storesError;
+
+        setSupabaseConnected(true);
+
+        // Fetch products
+        const { data: productsData, error: prodError } = await supabase.from('products').select('*');
+        if (!prodError && productsData && productsData.length > 0) {
+          const mappedProds: Product[] = productsData.map((p: any) => ({
+            id: p.id,
+            name: p.name,
+            category: p.category,
+            icon: p.icon,
+            storesCount: 4,
+            isNearSoldOut: p.is_near_sold_out
+          }));
+          setProducts(mappedProds);
+        }
+
+        // Fetch store_prices
+        const { data: pricesData, error: pricesError } = await supabase.from('store_prices').select('*');
+        if (!pricesError && pricesData && pricesData.length > 0) {
+          const pricesMap: Record<string, any[]> = {};
+          pricesData.forEach((row: any) => {
+            if (!pricesMap[row.product_id]) {
+              pricesMap[row.product_id] = [];
+            }
+            pricesMap[row.product_id].push({
+              storeId: row.store_id,
+              price: Number(row.price),
+              stockStatus: row.stock_status,
+              stockCount: row.stock_count,
+              updateTime: row.updated_at ? formatTimeAgo(new Date(row.updated_at)) : 'Justo ahora'
+            });
+          });
+          setStorePrices(pricesMap);
+        }
+
+        // Fetch crowd reports
+        const { data: reportsData, error: reportsError } = await supabase
+          .from('crowd_reports')
+          .select('*')
+          .order('created_at', { ascending: false })
+          .limit(6);
+
+        if (!reportsError && reportsData && reportsData.length > 0) {
+          const mappedReports = reportsData.map((r: any) => ({
+            id: r.id,
+            user: r.user_name,
+            product: r.product_name,
+            store: r.store_name,
+            price: Number(r.price),
+            time: formatTimeAgo(new Date(r.created_at))
+          }));
+          setCrowdReports(mappedReports);
+          setReportsCount(mappedReports.length + 178);
+        }
+      } catch (err) {
+        console.warn("Supabase skipped, using fallback local datasets:", err);
+        setSupabaseConnected(false);
+      } finally {
+        setSupabaseLoading(false);
+      }
+    }
+    loadData();
+  }, []);
+
+  // 2. Poll for active order changes in real-time between role interfaces
+  useEffect(() => {
+    if (!activeOrder) return;
+    const pollInterval = setInterval(async () => {
+      try {
+        const { data, error } = await supabase
+          .from('orders')
+          .select('*')
+          .eq('id', activeOrder.id)
+          .single();
+        
+        if (data && !error) {
+          setActiveOrder(curr => {
+            if (!curr) return null;
+            if (curr.status !== data.status || curr.step !== data.step) {
+              setOrderStep(data.step);
+              return {
+                ...curr,
+                status: data.status,
+                step: data.step
+              };
+            }
+            return curr;
+          });
+        }
+      } catch (err) {
+        console.warn("Active order polling skipped:", err);
+      }
+    }, 4500);
+
+    return () => clearInterval(pollInterval);
+  }, [activeOrder?.id]);
+
   // Auto rate ticker update simulation
   useEffect(() => {
     const timer = setInterval(() => {
@@ -121,6 +243,15 @@ export default function App() {
             else if (next === 3) nextStatus = 'RECOGIENDO';
             else if (next === 4) nextStatus = 'RUTA';
             else if (next === 5) nextStatus = 'ENTREGADO';
+
+            // Propagate progress status changes automatically to Supabase backend in the background
+            supabase.from('orders').update({
+              status: nextStatus,
+              step: next
+            }).eq('id', curr.id).then(({ error }) => {
+              if (error) console.warn("Background order progress update skipped:", error);
+            });
+
             return {
               ...curr,
               status: nextStatus,
@@ -234,7 +365,7 @@ export default function App() {
   };
 
   // Confirm order handle
-  const handleConfirmOrder = () => {
+  const handleConfirmOrder = async () => {
     if (cart.length === 0) return;
     
     // If paid via wallet, subtract balance
@@ -266,6 +397,24 @@ export default function App() {
     // Reward user with cashback to wallet
     setUserWallet(prev => prev + cashbackEarned);
     triggerNotification(`🎉 ¡Ganaste $${cashbackEarned.toFixed(2)} de cashback!`);
+
+    // Write order to Supabase
+    try {
+      await supabase.from('orders').insert({
+        id: orderId,
+        items: orderDetails.items,
+        subtotal: orderDetails.subtotal,
+        delivery_fee: orderDetails.deliveryFee,
+        total_usd: orderDetails.totalUsd,
+        payment_method: orderDetails.paymentMethod,
+        status: orderDetails.status,
+        delivery_type: orderDetails.deliveryType,
+        step: 1,
+        created_at: new Date()
+      });
+    } catch (err) {
+      console.warn("Could not save order to Supabase, running locally:", err);
+    }
   };
 
   // Reset checkout after completion
@@ -280,7 +429,7 @@ export default function App() {
   };
 
   // Crowdsourcing Price Update Handler
-  const handlePostReport = (e: React.FormEvent) => {
+  const handlePostReport = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!reportingProduct || !reportingPrice) return;
     
@@ -348,6 +497,30 @@ export default function App() {
     setReportingProduct(null); // Close form
     setReportingPrice('');
     setReportingStockCount('');
+
+    // Persist to Supabase
+    try {
+      // 1. Update store price row on store_prices table
+      await supabase.from('store_prices').upsert({
+        product_id: currentProdId,
+        store_id: storeIdStr,
+        price: inputPrice,
+        stock_status: reportingStockStatus,
+        stock_count: reportingStockCount ? parseInt(reportingStockCount) : null,
+        updated_at: new Date()
+      }, { onConflict: 'product_id,store_id' });
+
+      // 2. Log report event
+      await supabase.from('crowd_reports').insert({
+        user_name: 'Tú (Colaborador)',
+        product_name: reportingProduct.name,
+        store_name: STORES[storeIdStr]?.name || 'Tienda',
+        price: inputPrice,
+        created_at: new Date()
+      });
+    } catch (err) {
+      console.warn("Could not sync crowdsourced report to Supabase:", err);
+    }
   };
 
   // Render Category Icon helper
@@ -632,7 +805,7 @@ export default function App() {
                       const currentPrice = myStoreRef ? myStoreRef.price : 1.99;
                       const currentStockStatus = myStoreRef ? myStoreRef.stockStatus : 'DISPONIBLE';
 
-                      const updateStorePriceAndStock = (newPrice: number, newStatus: string) => {
+                      const updateStorePriceAndStock = async (newPrice: number, newStatus: string) => {
                         setStorePrices(prev => {
                           const list = prev[prod.id] || [];
                           const idx = list.findIndex(p => p.storeId === selectedAliadoStoreId);
@@ -665,6 +838,18 @@ export default function App() {
                         });
 
                         triggerNotification(`🏪 ¡Actualizado! ${prod.name} -> $${newPrice.toFixed(2)}`);
+
+                        try {
+                          await supabase.from('store_prices').upsert({
+                            product_id: prod.id,
+                            store_id: selectedAliadoStoreId,
+                            price: Number(newPrice.toFixed(2)),
+                            stock_status: newStatus,
+                            updated_at: new Date()
+                          }, { onConflict: 'product_id,store_id' });
+                        } catch (err) {
+                          console.warn("Could not upsert store price to Supabase:", err);
+                        }
                       };
 
                       return (
@@ -759,13 +944,19 @@ export default function App() {
 
                       {/* Stepper control buttons */}
                       <div className="space-y-2">
-                        <label className="text-[10px] uppercase font-bold tracking-widest text-[#555]">PROGRESO DEL DELIVEY</label>
+                        <label className="text-[10px] uppercase font-bold tracking-widest text-[#555]">PROGRESO DEL DELIVERY</label>
                         <div className="grid grid-cols-2 gap-2 text-center text-xs">
                           <button 
                             type="button"
                             disabled={activeOrder.status !== 'CREADO'}
                             onClick={() => {
-                              setActiveOrder(curr => curr ? { ...curr, status: 'ACEPTADO', step: 2 } : null);
+                              setActiveOrder(curr => {
+                                if (curr) {
+                                  supabase.from('orders').update({ status: 'ACEPTADO', step: 2 }).eq('id', curr.id).then(() => {});
+                                  return { ...curr, status: 'ACEPTADO', step: 2 };
+                                }
+                                return null;
+                              });
                               setOrderStep(2);
                               triggerNotification("🛵 ¡Órden aceptada! Rumbo a la tienda.");
                             }}
@@ -778,7 +969,13 @@ export default function App() {
                             type="button"
                             disabled={activeOrder.status !== 'ACEPTADO'}
                             onClick={() => {
-                              setActiveOrder(curr => curr ? { ...curr, status: 'RECOGIENDO', step: 3 } : null);
+                              setActiveOrder(curr => {
+                                if (curr) {
+                                  supabase.from('orders').update({ status: 'RECOGIENDO', step: 3 }).eq('id', curr.id).then(() => {});
+                                  return { ...curr, status: 'RECOGIENDO', step: 3 };
+                                }
+                                return null;
+                              });
                               setOrderStep(3);
                               triggerNotification("🛍️ Pedido retirado de la tienda. En tránsito.");
                             }}
@@ -786,12 +983,18 @@ export default function App() {
                           >
                             🛍️ Retirar de tienda
                           </button>
-
+ 
                           <button 
                             type="button"
                             disabled={activeOrder.status !== 'RECOGIENDO'}
                             onClick={() => {
-                              setActiveOrder(curr => curr ? { ...curr, status: 'RUTA', step: 4 } : null);
+                              setActiveOrder(curr => {
+                                if (curr) {
+                                  supabase.from('orders').update({ status: 'RUTA', step: 4 }).eq('id', curr.id).then(() => {});
+                                  return { ...curr, status: 'RUTA', step: 4 };
+                                }
+                                return null;
+                              });
                               setOrderStep(4);
                               triggerNotification("📍 En ruta al destino del cliente.");
                             }}
@@ -799,12 +1002,18 @@ export default function App() {
                           >
                             🛣️ En ruta al cliente
                           </button>
-
+ 
                           <button 
                             type="button"
                             disabled={activeOrder.status !== 'RUTA'}
                             onClick={() => {
-                              setActiveOrder(curr => curr ? { ...curr, status: 'ENTREGADO', step: 5 } : null);
+                              setActiveOrder(curr => {
+                                if (curr) {
+                                  supabase.from('orders').update({ status: 'ENTREGADO', step: 5 }).eq('id', curr.id).then(() => {});
+                                  return { ...curr, status: 'ENTREGADO', step: 5 };
+                                }
+                                return null;
+                              });
                               setOrderStep(5);
                               triggerNotification("🎉 ¡Pedido entregado! Ecosistema completado.");
                             }}
