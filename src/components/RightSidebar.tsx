@@ -145,7 +145,7 @@ export default function RightSidebar({
 
             <button
               type="submit"
-              className="w-full py-3 glow-btn-purple text-black font-extrabold text-[10px] uppercase tracking-widest rounded-xl transition-all cursor-pointer"
+              className="w-full py-3 glow-btn-neon text-black font-extrabold text-[10px] uppercase tracking-widest rounded-xl transition-all cursor-pointer"
             >
               Enviar Reporte & Ganar $0.10
             </button>

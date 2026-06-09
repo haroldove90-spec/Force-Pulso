@@ -28,7 +28,7 @@ export default function LeftSidebar({
   return (
     <aside className="col-span-1 md:col-span-4 lg:col-span-3 space-y-6 hidden md:block self-stretch">
       {/* Logo & Platform Info Card with glowing neon border */}
-      <div className="glass-panel purple-glow-border rounded-2xl p-6 relative overflow-hidden transition-all duration-300 hover:shadow-[0_0_20px_rgba(226,255,59,0.1)]">
+      <div className="glass-panel neon-glow-border rounded-2xl p-6 relative overflow-hidden transition-all duration-300 hover:shadow-[0_0_20px_rgba(226,255,59,0.1)]">
         <div className="absolute top-0 right-0 w-36 h-36 bg-[#e2ff3b]/5 rounded-full blur-3xl -z-10"></div>
         <div className="flex items-center gap-3 mb-4">
           <div className="w-9 h-9 rounded-xl bg-[#e2ff3b] flex items-center justify-center font-black text-black text-lg shadow-md shadow-[#e2ff3b]/20 font-display">

@@ -3,34 +3,35 @@ import React from 'react';
 export default function GlossyOrb() {
   return (
     <div className="relative w-44 h-44 mx-auto flex items-center justify-center my-6 group select-none">
-      {/* Intense pulsing deep purple behind-glow */}
-      <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-[#8100ff]/30 to-[#ff0080]/30 blur-2xl animate-pulse scale-110"></div>
+      {/* Intense pulsing neon-yellow behind-glow */}
+      <div className="absolute w-28 h-28 rounded-full bg-[#e2ff3b]/5 blur-xl animate-pulse scale-110"></div>
       
-      {/* Outer spinning orbital neon ring */}
-      <div className="absolute inset-1 rounded-full border border-dashed border-[#8100ff]/40 animate-spin" style={{ animationDuration: '25s' }}></div>
-      <div className="absolute inset-4 rounded-full border border-spacing-1 border-dotted border-[#ff0080]/30 animate-spin" style={{ animationDuration: '15s', animationDirection: 'reverse' }}></div>
+      {/* Concentric rotating radar circles */}
+      <div className="absolute inset-2 rounded-full border border-dashed border-[#e2ff3b]/20 animate-spin" style={{ animationDuration: '30s' }}></div>
+      <div className="absolute inset-6 rounded-full border border-spacing-1 border-dotted border-[#e2ff3b]/10 animate-spin animate-pulse" style={{ animationDuration: '18s', animationDirection: 'reverse' }}></div>
+      <div className="absolute inset-10 rounded-full border border-zinc-800"></div>
+      <div className="absolute inset-16 rounded-full border border-zinc-800"></div>
 
-      {/* Glossy Metallic 3D-feeling Sphere with multiple overlay layers */}
-      <div className="absolute w-32 h-32 rounded-full bg-gradient-to-br from-[#10032c] via-[#4d0b9e] to-[#e60073] shadow-[inset_-8px_-10px_30px_rgba(0,0,0,0.8),_inset_8px_10px_24px_rgba(255,255,255,0.45),_0_12px_36px_rgba(129,0,255,0.65)] flex items-center justify-center overflow-hidden transition-transform duration-500 group-hover:scale-105">
-        
-        {/* Holographic turquoise bottom reflection */}
-        <div className="absolute -bottom-6 -left-6 w-24 h-24 rounded-full bg-[#00f5ff]/30 blur-xl mix-blend-screen animate-pulse"></div>
-        
-        {/* Upper golden highlight flare */}
-        <div className="absolute -top-4 -right-2 w-20 h-20 rounded-full bg-[#ffb700]/15 blur-lg mix-blend-screen"></div>
+      {/* Crosshair grids */}
+      <div className="absolute w-40 h-[1px] bg-zinc-900"></div>
+      <div className="absolute h-40 w-[1px] bg-zinc-900"></div>
 
-        {/* Dynamic center core waves */}
-        <div className="relative z-10 w-16 h-16 rounded-full bg-[#1e0a45]/80 glass-panel border border-[#a200ff]/30 flex items-center justify-center shadow-inner">
-          <span className="text-3xl animate-bounce text-pink-400">⚡</span>
+      {/* Central Solid Glossy Radar Node */}
+      <div className="absolute w-20 h-20 rounded-full bg-zinc-950 border border-[#e2ff3b]/30 shadow-[inset_0_2px_10px_rgba(226,255,59,0.1),_0_8px_30px_rgba(0,0,0,0.8)] flex items-center justify-center overflow-hidden transition-transform duration-500 group-hover:scale-105">
+        
+        {/* Radar sweeping indicator line */}
+        <div className="absolute inset-0 bg-[conic-gradient(from_0deg_at_50%_50%,rgba(226,255,59,0.15)_0deg,transparent_180deg)] animate-spin" style={{ animationDuration: '4s' }}></div>
+        
+        {/* Center core pulse node */}
+        <div className="relative z-10 w-9 h-9 rounded-full bg-black border border-zinc-800 flex items-center justify-center shadow-lg">
+          <span className="text-sm font-black text-[#e2ff3b] animate-pulse">⚡</span>
         </div>
-
-        {/* Shiny absolute specular glare arc near top-left surface */}
-        <div className="absolute top-1.5 left-3.5 w-24 h-12 bg-white/20 rounded-full rotate-[36deg] blur-[2px] pointer-events-none"></div>
       </div>
 
-      {/* Floating miniature orbiting crystal particles */}
-      <div className="absolute top-6 left-6 w-3 h-3 rounded-full bg-gradient-to-r from-cyan-400 to-blue-500 shadow-lg shadow-cyan-400/50 animate-ping"></div>
-      <div className="absolute bottom-6 right-6 w-2.5 h-2.5 rounded-full bg-gradient-to-r from-pink-400 to-[#e60073] shadow-lg shadow-pink-400/50 animate-pulse"></div>
+      {/* Radar signal blips (little active signal dots) */}
+      <div className="absolute top-[20%] left-[30%] w-2 h-2 rounded-full bg-[#e2ff3b] shadow-lg shadow-[#e2ff3b]/50 animate-ping"></div>
+      <div className="absolute bottom-[25%] right-[22%] w-1.5 h-1.5 rounded-full bg-white opacity-40"></div>
     </div>
   );
 }
+

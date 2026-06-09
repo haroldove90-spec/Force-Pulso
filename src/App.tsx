@@ -683,7 +683,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#06020f] text-[#f1ecf9] font-sans flex flex-col antialiased">
+    <div className="min-h-screen bg-black text-zinc-100 font-sans flex flex-col antialiased">
       
       {/* Dynamic Style overrides for user customization in real-time */}
       <style dangerouslySetInnerHTML={{ __html: `
@@ -704,9 +704,9 @@ export default function App() {
 
       {/* Floating Status / Toast notification for crowdsourcing actions with intense glow */}
       {showRewardNotification && (
-        <div className="fixed top-5 left-1/2 -translate-x-1/2 z-50 bg-[#16062b] border border-[#ff0080]/55 px-6 py-3.5 rounded-full flex items-center gap-2.5 shadow-[0_0_35px_rgba(255,0,128,0.5)] animate-bounce text-sm max-w-sm text-center">
-          <Sparkles className="w-5 h-5 text-pink-400 shrink-0" />
-          <span className="font-extrabold text-white text-xs tracking-wide uppercase font-display">{showRewardNotification}</span>
+        <div className="fixed top-5 left-1/2 -translate-x-1/2 z-50 bg-zinc-950 border border-[#e2ff3b] px-6 py-3.5 rounded-full flex items-center gap-2.5 shadow-[0_4px_30px_rgba(226,255,59,0.25)] animate-bounce text-sm max-w-sm text-center">
+          <Sparkles className="w-5 h-5 text-[#e2ff3b] shrink-0" />
+          <span className="font-extrabold text-[#e2ff3b] text-xs tracking-wide uppercase font-display">{showRewardNotification}</span>
         </div>
       )}
 
@@ -799,7 +799,7 @@ export default function App() {
       </div>
 
       {/* Main Desktop Dashboard Frame */}
-      <div className="w-full max-w-7xl mx-auto px-4 py-8 grid grid-cols-1 md:grid-cols-12 gap-6 items-start flex-1">
+      <div className="w-full max-w-[1600px] mx-auto px-4 md:px-8 xl:px-12 py-8 grid grid-cols-1 md:grid-cols-12 gap-6 items-start flex-1">
         
         {/* Left column: Feed, info panel & collaborative network stats */}
         <LeftSidebar 
@@ -858,25 +858,25 @@ export default function App() {
             {activeRole === 'admin' ? (
               <div className="p-5 space-y-5 flex-grow flex flex-col justify-between overflow-y-auto">
                 <div className="space-y-4">
-                  <div className="flex items-center justify-between border-b border-[#38166c]/30 pb-3.5">
+                  <div className="flex items-center justify-between border-b border-zinc-800 pb-3.5">
                     <div>
                       <h3 className="text-sm font-black text-white uppercase tracking-wider flex items-center gap-2 font-display">
-                         <span className="text-pink-400">⚙️</span>
+                         <span className="text-[#e2ff3b]">⚙️</span>
                          <span>Módulo de Preferencias de Color</span>
                       </h3>
-                      <p className="text-[10px] text-[#a491bc] mt-0.5 font-medium">Personaliza y redefine el estilo visual de Forcé Pulso en tiempo real</p>
+                      <p className="text-[10px] text-zinc-400 mt-0.5 font-medium">Personaliza y redefine el estilo visual de Forcé Pulso en tiempo real</p>
                     </div>
                     
                     <button
                       onClick={resetColors}
-                      className="px-3 py-1.5 bg-[#240e44]/85 text-[#ebd3ff] text-[10px] font-black uppercase rounded-lg border border-[#a200ff]/30 hover:border-pink-500/50 hover:bg-pink-900/40 hover:text-white transition-all cursor-pointer"
+                      className="px-3 py-1.5 bg-zinc-900 text-zinc-300 text-[10px] font-black uppercase rounded-lg border border-zinc-800 hover:border-[#e2ff3b]/40 hover:bg-zinc-800 hover:text-white transition-all cursor-pointer"
                     >
                       Restablecer
                     </button>
                   </div>
 
                   {/* Preset Quick Theme selectors */}
-                  <div className="bg-[#151518]/90 border border-[#2b2b30] p-4 rounded-xl shadow-[0_4px_12px_rgba(0,0,0,0.4)]">
+                  <div className="bg-zinc-950 border border-zinc-800 p-4 rounded-xl shadow-[0_4px_12px_rgba(0,0,0,0.4)]">
                     <span className="text-[10px] uppercase font-bold text-gray-400 block mb-2 font-display tracking-widest">Temas Preestablecidos</span>
                     <div className="grid grid-cols-2 gap-2">
                       <button
@@ -887,19 +887,19 @@ export default function App() {
                       </button>
                       <button
                         onClick={() => applyPresetTheme('neon')}
-                        className="py-1.5 px-2 bg-[#06020f] border border-pink-500/40 rounded-lg text-[9px] text-[#ebd3ff] hover:bg-pink-900/10 cursor-pointer font-bold uppercase transition-all"
+                        className="py-1.5 px-2 bg-zinc-900 border border-zinc-800 rounded-lg text-[9px] text-zinc-300 hover:bg-zinc-800 cursor-pointer font-bold uppercase transition-all"
                       >
                         Cyber Neon 👾
                       </button>
                       <button
                         onClick={() => applyPresetTheme('emerald')}
-                        className="py-1.5 px-2 bg-[#020d08] border border-emerald-500/40 rounded-lg text-[9px] text-[#e3ffd3] hover:bg-emerald-900/10 cursor-pointer font-bold uppercase transition-all"
+                        className="py-1.5 px-2 bg-zinc-900 border border-zinc-800 rounded-lg text-[9px] text-zinc-300 hover:bg-zinc-800 cursor-pointer font-bold uppercase transition-all"
                       >
                         Abasto Verde 🥦
                       </button>
                       <button
                         onClick={() => applyPresetTheme('sunset')}
-                        className="py-1.5 px-2 bg-[#0f0402] border border-orange-500/40 rounded-lg text-[9px] text-[#ffebe3] hover:bg-orange-900/10 cursor-pointer font-bold uppercase transition-all"
+                        className="py-1.5 px-2 bg-zinc-900 border border-zinc-800 rounded-lg text-[9px] text-zinc-300 hover:bg-zinc-800 cursor-pointer font-bold uppercase transition-all"
                       >
                         Atardecer Yara 🌅
                       </button>
@@ -908,13 +908,13 @@ export default function App() {
 
                   {/* Individual Color Customizers */}
                   <div className="space-y-3 pr-1">
-                    <span className="text-[10px] uppercase font-black tracking-widest text-[#a491bc] font-display block">Paleta de Colores del Dashboard</span>
+                    <span className="text-[10px] uppercase font-black tracking-widest text-[#e2ff3b] font-display block">Paleta de Colores del Dashboard</span>
                     
                     {/* Background Start */}
-                    <div className="p-3 bg-[#13072a]/70 border border-[#38166c]/30 rounded-xl flex items-center justify-between gap-3 hover:border-[#a200ff]/30 transition-all">
+                    <div className="p-3 bg-zinc-900/60 border border-zinc-800/80 rounded-xl flex items-center justify-between gap-3 hover:border-[#e2ff3b]/30 transition-all">
                       <div className="space-y-0.5">
                         <span className="text-xs font-bold text-white block">Inicio del Fondo</span>
-                        <span className="text-[9px] text-[#a491bc] block">Degradado global (arriba)</span>
+                        <span className="text-[9px] text-zinc-400 block">Degradado global (arriba)</span>
                       </div>
                       <div className="flex items-center gap-2 font-mono text-[10px]">
                         <span className="text-white">{dashboardColors.bgStart}</span>
@@ -928,10 +928,10 @@ export default function App() {
                     </div>
 
                     {/* Background End */}
-                    <div className="p-3 bg-[#13072a]/70 border border-[#38166c]/30 rounded-xl flex items-center justify-between gap-3 hover:border-[#a200ff]/30 transition-all">
+                    <div className="p-3 bg-zinc-900/60 border border-zinc-800/80 rounded-xl flex items-center justify-between gap-3 hover:border-[#e2ff3b]/30 transition-all">
                       <div className="space-y-0.5">
                         <span className="text-xs font-bold text-white block">Fin del Fondo</span>
-                        <span className="text-[9px] text-[#a491bc] block">Degradado global (abajo)</span>
+                        <span className="text-[9px] text-zinc-400 block">Degradado global (abajo)</span>
                       </div>
                       <div className="flex items-center gap-2 font-mono text-[10px]">
                         <span className="text-white">{dashboardColors.bgEnd}</span>
@@ -945,10 +945,10 @@ export default function App() {
                     </div>
 
                     {/* Primary Glow Color */}
-                    <div className="p-3 bg-[#13072a]/70 border border-[#38166c]/30 rounded-xl flex items-center justify-between gap-3 hover:border-[#a200ff]/30 transition-all">
+                    <div className="p-3 bg-zinc-900/60 border border-zinc-800/80 rounded-xl flex items-center justify-between gap-3 hover:border-[#e2ff3b]/30 transition-all">
                       <div className="space-y-0.5">
                         <span className="text-xs font-bold text-white block">Color Primario (Glow)</span>
-                        <span className="text-[9px] text-[#a491bc] block font-medium">Botones y resplandores primarios</span>
+                        <span className="text-[9px] text-zinc-400 block font-medium">Botones y resplandores primarios</span>
                       </div>
                       <div className="flex items-center gap-2 font-mono text-[10px]">
                         <span className="text-white">{dashboardColors.primary}</span>
@@ -962,10 +962,10 @@ export default function App() {
                     </div>
 
                     {/* Secondary Color */}
-                    <div className="p-3 bg-[#13072a]/70 border border-[#38166c]/30 rounded-xl flex items-center justify-between gap-3 hover:border-[#a200ff]/30 transition-all">
+                    <div className="p-3 bg-zinc-900/60 border border-zinc-800/80 rounded-xl flex items-center justify-between gap-3 hover:border-[#e2ff3b]/30 transition-all">
                       <div className="space-y-0.5">
                         <span className="text-xs font-bold text-white block">Color Secundario</span>
-                        <span className="text-[9px] text-[#a491bc] block font-medium">Gradientes secundarios de acción</span>
+                        <span className="text-[9px] text-zinc-400 block font-medium">Gradientes secundarios de acción</span>
                       </div>
                       <div className="flex items-center gap-2 font-mono text-[10px]">
                         <span className="text-white">{dashboardColors.secondary}</span>
@@ -979,10 +979,10 @@ export default function App() {
                     </div>
 
                     {/* Accent Color */}
-                    <div className="p-3 bg-[#13072a]/70 border border-[#38166c]/30 rounded-xl flex items-center justify-between gap-3 hover:border-[#a200ff]/30 transition-all">
+                    <div className="p-3 bg-zinc-900/60 border border-zinc-800/80 rounded-xl flex items-center justify-between gap-3 hover:border-[#e2ff3b]/30 transition-all">
                       <div className="space-y-0.5">
                         <span className="text-xs font-bold text-white block">Acento de Neón</span>
-                        <span className="text-[9px] text-[#a491bc] block font-medium">Bordes activos y tags</span>
+                        <span className="text-[9px] text-zinc-400 block font-medium">Bordes activos y tags</span>
                       </div>
                       <div className="flex items-center gap-2 font-mono text-[10px]">
                         <span className="text-white">{dashboardColors.accent}</span>
@@ -996,10 +996,10 @@ export default function App() {
                     </div>
 
                     {/* Text Main */}
-                    <div className="p-3 bg-[#13072a]/70 border border-[#38166c]/30 rounded-xl flex items-center justify-between gap-3 hover:border-[#a200ff]/30 transition-all">
+                    <div className="p-3 bg-zinc-900/60 border border-zinc-800/80 rounded-xl flex items-center justify-between gap-3 hover:border-[#e2ff3b]/30 transition-all">
                       <div className="space-y-0.5">
                         <span className="text-xs font-bold text-white block">Texto Principal</span>
-                        <span className="text-[9px] text-[#a491bc] block font-medium">Color de títulos e inputs</span>
+                        <span className="text-[9px] text-zinc-400 block font-medium">Color de títulos e inputs</span>
                       </div>
                       <div className="flex items-center gap-2 font-mono text-[10px]">
                         <span className="text-white">{dashboardColors.textMain}</span>
@@ -1013,10 +1013,10 @@ export default function App() {
                     </div>
 
                     {/* Text Muted */}
-                    <div className="p-3 bg-[#13072a]/70 border border-[#38166c]/30 rounded-xl flex items-center justify-between gap-3 hover:border-[#a200ff]/30 transition-all">
+                    <div className="p-3 bg-zinc-900/60 border border-zinc-800/80 rounded-xl flex items-center justify-between gap-3 hover:border-[#e2ff3b]/30 transition-all">
                       <div className="space-y-0.5">
                         <span className="text-xs font-bold text-white block">Texto Secundario (Muted)</span>
-                        <span className="text-[9px] text-[#a491bc] block font-medium">Subtítulos e indicadores</span>
+                        <span className="text-[9px] text-zinc-400 block font-medium">Subtítulos e indicadores</span>
                       </div>
                       <div className="flex items-center gap-2 font-mono text-[10px]">
                         <span className="text-white">{dashboardColors.textMuted}</span>
@@ -1030,16 +1030,16 @@ export default function App() {
                     </div>
 
                     {/* Border Primary */}
-                    <div className="p-3 bg-[#13072a]/70 border border-[#38166c]/30 rounded-xl flex items-center justify-between gap-3 hover:border-[#a200ff]/30 transition-all">
+                    <div className="p-3 bg-zinc-900/60 border border-zinc-800/80 rounded-xl flex items-center justify-between gap-3 hover:border-[#e2ff3b]/30 transition-all">
                       <div className="space-y-0.5">
-                        <span className="text-xs font-bold text-white block">Borde Purpura / Principal</span>
-                        <span className="text-[9px] text-[#a491bc] block font-medium">Bordes resplandecientes primarios</span>
+                        <span className="text-xs font-bold text-white block">Borde Primario</span>
+                        <span className="text-[9px] text-zinc-400 block font-medium">Bordes resplandecientes primarios</span>
                       </div>
                       <div className="flex items-center gap-2 font-mono text-[10px]">
                         <span className="text-white">{dashboardColors.borderPrimary}</span>
                         <input 
                           type="color" 
-                          value={dashboardColors.borderPrimary.startsWith('rgba') ? '#8100ff' : dashboardColors.borderPrimary}
+                          value={dashboardColors.borderPrimary.startsWith('rgba') ? '#e2ff3b' : dashboardColors.borderPrimary}
                           onChange={(e) => handleColorChange('borderPrimary', e.target.value)}
                           className="w-8 h-8 rounded border-none bg-transparent cursor-pointer outline-none shrink-0"
                         />
@@ -1047,16 +1047,16 @@ export default function App() {
                     </div>
 
                     {/* Border Secondary */}
-                    <div className="p-3 bg-[#13072a]/70 border border-[#38166c]/30 rounded-xl flex items-center justify-between gap-3 hover:border-[#a200ff]/30 transition-all">
+                    <div className="p-3 bg-zinc-900/60 border border-zinc-800/80 rounded-xl flex items-center justify-between gap-3 hover:border-[#e2ff3b]/30 transition-all">
                       <div className="space-y-0.5">
-                        <span className="text-xs font-bold text-white block">Borde Rosado / Secundario</span>
-                        <span className="text-[9px] text-[#a491bc] block font-medium">Bordes resplandecientes secundarios</span>
+                        <span className="text-xs font-bold text-white block">Borde Secundario</span>
+                        <span className="text-[9px] text-zinc-400 block font-medium">Bordes resplandecientes secundarios</span>
                       </div>
                       <div className="flex items-center gap-2 font-mono text-[10px]">
                         <span className="text-white">{dashboardColors.borderSecondary}</span>
                         <input 
                           type="color" 
-                          value={dashboardColors.borderSecondary.startsWith('rgba') ? '#ff0080' : dashboardColors.borderSecondary}
+                          value={dashboardColors.borderSecondary.startsWith('rgba') ? '#ffffff' : dashboardColors.borderSecondary}
                           onChange={(e) => handleColorChange('borderSecondary', e.target.value)}
                           className="w-8 h-8 rounded border-none bg-transparent cursor-pointer outline-none shrink-0"
                         />
@@ -1064,10 +1064,10 @@ export default function App() {
                     </div>
 
                     {/* Card Background Color - Solid / Semi-translucent */}
-                    <div className="p-3 bg-[#13072a]/70 border border-[#38166c]/30 rounded-xl flex items-center justify-between gap-3 max-w-none hover:border-[#a200ff]/30 transition-all">
+                    <div className="p-3 bg-zinc-900/60 border border-zinc-800/80 rounded-xl flex items-center justify-between gap-3 max-w-none hover:border-[#e2ff3b]/30 transition-all">
                       <div className="space-y-0.5">
                         <span className="text-xs font-bold text-white block">Fondo de Vidrios / Cards</span>
-                        <span className="text-[9px] text-[#a491bc] block font-medium">Color de fondo translúcido</span>
+                        <span className="text-[9px] text-zinc-400 block font-medium">Color de fondo translúcido</span>
                       </div>
                       <div className="flex items-center gap-2 font-mono text-[10px]">
                         <span className="text-white">{dashboardColors.cardBg}</span>
@@ -1190,42 +1190,42 @@ export default function App() {
                       };
 
                       return (
-                        <div key={prod.id} className="p-3 bg-[#13072a]/70 border border-[#38166c]/30 rounded-xl flex items-center justify-between gap-3 hover:border-[#a200ff]/35 transition-all">
+                        <div key={prod.id} className="p-3 bg-zinc-900/60 border border-zinc-800 rounded-xl flex items-center justify-between gap-3 hover:border-[#e2ff3b]/30 transition-all">
                           <div className="flex items-center gap-2.5">
-                            <span className="text-xl p-1 bg-[#180a30] rounded-lg border border-[#a200ff]/25">{prod.icon}</span>
+                            <span className="text-xl p-1 bg-zinc-950 rounded-lg border border-zinc-800">{prod.icon}</span>
                             <div>
                               <h4 className="text-xs font-bold text-white font-display">{prod.name}</h4>
                               <div className="flex gap-2 items-center mt-1">
                                 <select 
                                   value={currentStockStatus}
                                   onChange={(e) => updateStorePriceAndStock(currentPrice, e.target.value)}
-                                  className="bg-[#1a0c36] border border-[#38166c] text-[9px] font-black py-0.5 px-1.5 rounded outline-none text-pink-400 cursor-pointer focus:border-pink-500"
+                                  className="bg-zinc-950 border border-zinc-800 text-[10px] font-black py-0.5 px-1.5 rounded outline-none text-[#e2ff3b] cursor-pointer focus:border-[#e2ff3b]/60"
                                 >
-                                  <option value="DISPONIBLE" className="bg-[#1a0c36] text-pink-400 font-bold">HAY STOCK</option>
-                                  <option value="POCAS UNIDADES" className="bg-[#1a0c36] text-[#c18aff] font-bold">POCO STOCK</option>
-                                  <option value="AGOTADO" className="bg-[#1a0c36] text-[#a491bc] font-bold">AGOTADO</option>
+                                  <option value="DISPONIBLE" className="bg-zinc-950 text-[#e2ff3b] font-bold">HAY STOCK</option>
+                                  <option value="POCAS UNIDADES" className="bg-zinc-950 text-orange-400 font-bold font-mono">POCO STOCK</option>
+                                  <option value="AGOTADO" className="bg-zinc-950 text-red-500 font-bold">AGOTADO</option>
                                 </select>
                               </div>
                             </div>
                           </div>
 
                           {/* Price Adjusters */}
-                          <div className="flex items-center gap-2 bg-[#180a30] border border-[#38166c] p-1.5 rounded-xl">
+                          <div className="flex items-center gap-2 bg-zinc-950 border border-zinc-800 p-1.5 rounded-xl">
                             <button 
-                              type="button"
-                              onClick={() => updateStorePriceAndStock(Math.max(0.1, currentPrice - 0.1), currentStockStatus)}
-                              className="w-6 h-6 rounded bg-[#240e44]/80 flex items-center justify-center font-bold text-xs text-[#ebd3ff] hover:bg-pink-900/40 hover:text-white cursor-pointer transition-all"
+                               type="button"
+                               onClick={() => updateStorePriceAndStock(Math.max(0.1, currentPrice - 0.1), currentStockStatus)}
+                               className="w-6 h-6 rounded bg-zinc-800 hover:bg-zinc-700 flex items-center justify-center font-bold text-xs text-zinc-100 hover:text-[#e2ff3b] cursor-pointer transition-all"
                             >
                               -
                             </button>
                             <div className="text-center min-w-[55px]">
                               <span className="text-xs font-mono font-extrabold text-white block">${currentPrice.toFixed(2)}</span>
-                              <span className="text-[8px] font-mono text-[#a491bc]/70 block">Bs. {(currentPrice * exchangeRate.rate).toFixed(1)}</span>
+                              <span className="text-[8px] font-mono text-zinc-500 block">Bs. {(currentPrice * exchangeRate.rate).toFixed(1)}</span>
                             </div>
                             <button 
-                              type="button"
-                              onClick={() => updateStorePriceAndStock(currentPrice + 0.1, currentStockStatus)}
-                              className="w-6 h-6 rounded bg-[#240e44]/80 flex items-center justify-center font-bold text-xs text-[#ebd3ff] hover:bg-[#8100ff]/40 hover:text-white cursor-pointer transition-all"
+                               type="button"
+                               onClick={() => updateStorePriceAndStock(currentPrice + 0.1, currentStockStatus)}
+                               className="w-6 h-6 rounded bg-zinc-800 hover:bg-zinc-700 flex items-center justify-center font-bold text-xs text-zinc-100 hover:text-[#e2ff3b] cursor-pointer transition-all"
                             >
                               +
                             </button>
@@ -2186,7 +2186,7 @@ export default function App() {
                       triggerNotification('🛒 Agrega productos primero para ver el carrito');
                     }
                   }}
-                  className="text-[10px] tracking-wider uppercase font-black text-pink-400 hover:text-pink-300 transition-colors cursor-pointer"
+                  className="text-[10px] tracking-wider uppercase font-black text-[#e2ff3b] hover:text-[#e2ff3b]/80 transition-colors cursor-pointer"
                 >
                   Ver Carrito ({cart.reduce((s, i) => s + i.quantity, 0)}) →
                 </button>
