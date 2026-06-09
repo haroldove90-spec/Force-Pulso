@@ -49,26 +49,32 @@ export default function App() {
 
   // Color Customization State
   const [dashboardColors, setDashboardColors] = useState(() => {
+    // We prioritize the new Sora yellow-black theme as the default
     const saved = localStorage.getItem('force_pulso_colors');
     if (saved) {
       try {
-        return JSON.parse(saved);
+        const parsed = JSON.parse(saved);
+        // If it still has old background purple start, we force-update to the new design
+        if (parsed.bgStart === '#06020f' || parsed.primary === '#8100ff') {
+          throw new Error("Old theme detected, upgrading to Sora Yellow-Black.");
+        }
+        return parsed;
       } catch (e) {
-        // ignore
+        // ignore & fallback to default
       }
     }
     return {
-      bgStart: '#06020f',
-      bgEnd: '#030107',
-      primary: '#8100ff',
-      secondary: '#d6006e',
-      accent: '#ff0080',
-      cardBg: 'rgba(18, 9, 36, 0.52)',
-      cardHeavy: 'rgba(11, 4, 25, 0.85)',
-      textMain: '#f1ecf9',
-      textMuted: '#a491bc',
-      borderPrimary: 'rgba(145, 0, 255, 0.22)',
-      borderSecondary: 'rgba(230, 0, 115, 0.22)'
+      bgStart: '#09090b',
+      bgEnd: '#010102',
+      primary: '#e2ff3b',
+      secondary: '#1b1b1f',
+      accent: '#e2ff3b',
+      cardBg: 'rgba(20, 20, 24, 0.72)',
+      cardHeavy: 'rgba(12, 12, 14, 0.95)',
+      textMain: '#ffffff',
+      textMuted: '#8e8e93',
+      borderPrimary: 'rgba(226, 255, 59, 0.15)',
+      borderSecondary: 'rgba(255, 255, 255, 0.06)'
     };
   });
 
@@ -78,22 +84,22 @@ export default function App() {
       const r = parseInt(value.slice(1, 3), 16);
       const g = parseInt(value.slice(3, 5), 16);
       const b = parseInt(value.slice(5, 7), 16);
-      updatedValue = `rgba(${r}, ${g}, ${b}, 0.52)`;
+      updatedValue = `rgba(${r}, ${g}, ${b}, 0.72)`;
     } else if (key === 'cardHeavy' && !value.startsWith('rgba')) {
       const r = parseInt(value.slice(1, 3), 16);
       const g = parseInt(value.slice(3, 5), 16);
       const b = parseInt(value.slice(5, 7), 16);
-      updatedValue = `rgba(${r}, ${g}, ${b}, 0.85)`;
+      updatedValue = `rgba(${r}, ${g}, ${b}, 0.95)`;
     } else if (key === 'borderPrimary' && !value.startsWith('rgba')) {
       const r = parseInt(value.slice(1, 3), 16);
       const g = parseInt(value.slice(3, 5), 16);
       const b = parseInt(value.slice(5, 7), 16);
-      updatedValue = `rgba(${r}, ${g}, ${b}, 0.22)`;
+      updatedValue = `rgba(${r}, ${g}, ${b}, 0.15)`;
     } else if (key === 'borderSecondary' && !value.startsWith('rgba')) {
       const r = parseInt(value.slice(1, 3), 16);
       const g = parseInt(value.slice(3, 5), 16);
       const b = parseInt(value.slice(5, 7), 16);
-      updatedValue = `rgba(${r}, ${g}, ${b}, 0.22)`;
+      updatedValue = `rgba(${r}, ${g}, ${b}, 0.06)`;
     }
 
     const updated = {
@@ -106,26 +112,40 @@ export default function App() {
 
   const resetColors = () => {
     const defaults = {
-      bgStart: '#06020f',
-      bgEnd: '#030107',
-      primary: '#8100ff',
-      secondary: '#d6006e',
-      accent: '#ff0080',
-      cardBg: 'rgba(18, 9, 36, 0.52)',
-      cardHeavy: 'rgba(11, 4, 25, 0.85)',
-      textMain: '#f1ecf9',
-      textMuted: '#a491bc',
-      borderPrimary: 'rgba(145, 0, 255, 0.22)',
-      borderSecondary: 'rgba(230, 0, 115, 0.22)'
+      bgStart: '#09090b',
+      bgEnd: '#010102',
+      primary: '#e2ff3b',
+      secondary: '#1b1b1f',
+      accent: '#e2ff3b',
+      cardBg: 'rgba(20, 20, 24, 0.72)',
+      cardHeavy: 'rgba(12, 12, 14, 0.95)',
+      textMain: '#ffffff',
+      textMuted: '#8e8e93',
+      borderPrimary: 'rgba(226, 255, 59, 0.15)',
+      borderSecondary: 'rgba(255, 255, 255, 0.06)'
     };
     setDashboardColors(defaults);
     localStorage.setItem('force_pulso_colors', JSON.stringify(defaults));
     triggerNotification("🔄 Colores de la consola restablecidos");
   };
 
-  const applyPresetTheme = (theme: 'neon' | 'emerald' | 'sunset') => {
+  const applyPresetTheme = (theme: 'neon' | 'emerald' | 'sunset' | 'sora') => {
     let selectedTheme = {};
-    if (theme === 'neon') {
+    if (theme === 'sora') {
+      selectedTheme = {
+        bgStart: '#09090b',
+        bgEnd: '#010102',
+        primary: '#e2ff3b',
+        secondary: '#1b1b1f',
+        accent: '#e2ff3b',
+        cardBg: 'rgba(20, 20, 24, 0.72)',
+        cardHeavy: 'rgba(12, 12, 14, 0.95)',
+        textMain: '#ffffff',
+        textMuted: '#8e8e93',
+        borderPrimary: 'rgba(226, 255, 59, 0.15)',
+        borderSecondary: 'rgba(255, 255, 255, 0.06)'
+      };
+    } else if (theme === 'neon') {
       selectedTheme = {
         bgStart: '#040114',
         bgEnd: '#010005',
@@ -691,12 +711,12 @@ export default function App() {
       )}
 
       {/* Demo Multi-Role Simulator Toolbar - Styled as premium glass bar */}
-      <div className="bg-[#120924]/80 border-b border-[#9100ff]/20 py-3 px-4 sticky top-0 z-40 shadow-[0_4px_30px_rgba(0,0,0,0.3)] backdrop-blur-md">
+      <div className="bg-[#0e0e11]/90 border-b border-zinc-800 py-3.5 px-4 sticky top-0 z-40 shadow-[0_4px_30px_rgba(0,0,0,0.4)] backdrop-blur-md">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2.5">
-            <span className="w-2 h-2 rounded-full bg-pink-500 animate-ping"></span>
-            <span className="text-[10px] uppercase font-mono font-black tracking-widest text-pink-400/80">Demo Console:</span>
-            <span className="text-xs text-[#ebd3ff] font-medium leading-none">Intercambia roles para probar Forcé Pulso desde cada perspectiva:</span>
+            <span className="w-2 h-2 rounded-full bg-[#e2ff3b] animate-ping"></span>
+            <span className="text-[10px] uppercase font-mono font-black tracking-widest text-[#e2ff3b]/90">Consola Demo:</span>
+            <span className="text-xs text-gray-300 font-medium leading-none">Intercambia roles para probar Forcé Pulso desde cada perspectiva:</span>
           </div>
           
           <div className="grid grid-cols-5 gap-1 w-full md:w-auto max-w-xl">
@@ -707,8 +727,8 @@ export default function App() {
               }}
               className={`py-2 px-2 text-[9px] tracking-wider uppercase font-black rounded-full transition-all duration-300 flex items-center justify-center gap-1 cursor-pointer ${
                 activeRole === 'cliente' 
-                  ? 'bg-gradient-to-r from-[#8100ff] to-[#d6006e] text-white shadow-[0_0_15px_rgba(129,0,255,0.4)] border-transparent' 
-                  : 'bg-[#1b0d35]/65 text-[#a491bc] hover:text-white hover:bg-[#2c135c]/80 border border-[#38166c]/40'
+                  ? 'bg-[#e2ff3b] text-black shadow-[0_0_15px_rgba(226,255,59,0.3)] border-transparent' 
+                  : 'bg-zinc-900 text-gray-400 hover:text-white hover:bg-zinc-800 border border-zinc-800'
               }`}
             >
               <span>🛒</span>
@@ -722,8 +742,8 @@ export default function App() {
               }}
               className={`py-2 px-2 text-[9px] tracking-wider uppercase font-black rounded-full transition-all duration-300 flex items-center justify-center gap-1 cursor-pointer ${
                 activeRole === 'colaborador' 
-                  ? 'bg-gradient-to-r from-[#8100ff] to-[#d6006e] text-white shadow-[0_0_15px_rgba(129,0,255,0.4)] border-transparent' 
-                  : 'bg-[#1b0d35]/65 text-[#a491bc] hover:text-white hover:bg-[#2c135c]/80 border border-[#38166c]/40'
+                  ? 'bg-[#e2ff3b] text-black shadow-[0_0_15px_rgba(226,255,59,0.3)] border-transparent' 
+                  : 'bg-zinc-900 text-gray-400 hover:text-white hover:bg-zinc-800 border border-zinc-800'
               }`}
             >
               <span>📝</span>
@@ -737,8 +757,8 @@ export default function App() {
               }}
               className={`py-2 px-2 text-[9px] tracking-wider uppercase font-black rounded-full transition-all duration-300 flex items-center justify-center gap-1 cursor-pointer ${
                 activeRole === 'aliado' 
-                  ? 'bg-gradient-to-r from-[#8100ff] to-[#d6006e] text-white shadow-[0_0_15px_rgba(129,0,255,0.4)] border-transparent' 
-                  : 'bg-[#1b0d35]/65 text-[#a491bc] hover:text-white hover:bg-[#2c135c]/80 border border-[#38166c]/40'
+                  ? 'bg-[#e2ff3b] text-black shadow-[0_0_15px_rgba(226,255,59,0.3)] border-transparent' 
+                  : 'bg-zinc-900 text-gray-400 hover:text-white hover:bg-zinc-800 border border-zinc-800'
               }`}
             >
               <span>🏪</span>
@@ -752,8 +772,8 @@ export default function App() {
               }}
               className={`py-2 px-2 text-[9px] tracking-wider uppercase font-black rounded-full transition-all duration-300 flex items-center justify-center gap-1 cursor-pointer ${
                 activeRole === 'motorizado' 
-                  ? 'bg-gradient-to-r from-[#8100ff] to-[#d6006e] text-white shadow-[0_0_15px_rgba(129,0,255,0.4)] border-transparent' 
-                  : 'bg-[#1b0d35]/65 text-[#a491bc] hover:text-white hover:bg-[#2c135c]/80 border border-[#38166c]/40'
+                  ? 'bg-[#e2ff3b] text-black shadow-[0_0_15px_rgba(226,255,59,0.3)] border-transparent' 
+                  : 'bg-zinc-900 text-gray-400 hover:text-white hover:bg-zinc-800 border border-zinc-800'
               }`}
             >
               <span>🛵</span>
@@ -767,8 +787,8 @@ export default function App() {
               }}
               className={`py-2 px-2 text-[9px] tracking-wider uppercase font-black rounded-full transition-all duration-300 flex items-center justify-center gap-1 cursor-pointer ${
                 activeRole === 'admin' 
-                  ? 'bg-gradient-to-r from-[#8100ff] to-[#d6006e] text-white shadow-[0_0_15px_rgba(129,0,255,0.4)] border-transparent' 
-                  : 'bg-[#1b0d35]/65 text-[#a491bc] hover:text-white hover:bg-[#2c135c]/80 border border-[#38166c]/40'
+                  ? 'bg-[#e2ff3b] text-black shadow-[0_0_15px_rgba(226,255,59,0.3)] border-transparent' 
+                  : 'bg-zinc-900 text-gray-400 hover:text-white hover:bg-zinc-800 border border-zinc-800'
               }`}
             >
               <span>⚙️</span>
@@ -791,36 +811,36 @@ export default function App() {
         />
 
         {/* Center column: Interactive App Container */}
-        <main className="col-span-1 md:col-span-8 lg:col-span-6 w-full max-w-2xl mx-auto md:max-w-none md:mx-0 bg-[#0a0416]/95 border border-[#9100ff]/25 rounded-3xl shadow-[0_22px_60px_rgba(0,0,0,0.8),_0_0_25px_rgba(129,0,255,0.18)] relative overflow-hidden flex flex-col h-[750px] md:h-[820px] lg:h-[880px]">
+        <main className="col-span-1 md:col-span-8 lg:col-span-6 w-full max-w-2xl mx-auto md:max-w-none md:mx-0 bg-black border border-zinc-800 rounded-[38px] shadow-[0_22px_65px_rgba(0,0,0,0.9),_0_0_2px_rgba(255,255,255,0.08)] relative overflow-hidden flex flex-col h-[750px] md:h-[820px] lg:h-[880px]">
           
           {/* Header Bar */}
-          <header className="px-5 py-4 border-b border-[#38166c]/30 bg-[#0c051a]/95 flex items-center justify-between">
+          <header className="px-5 py-4 border-b border-zinc-900 bg-[#0c0c0e] flex items-center justify-between">
             <div className="flex flex-col">
-              <span className="text-[10px] text-pink-400/80 uppercase tracking-widest font-extrabold font-display">Conexión Yaracuy</span>
+              <span className="text-[10px] text-[#e2ff3b]/90 uppercase tracking-widest font-extrabold font-display">Conexión Yaracuy</span>
               <div className="flex items-center gap-1.5 text-white font-black tracking-tight text-lg">
-                <StoreIcon className="w-4.5 h-4.5 text-pink-500 animate-pulse" />
-                <span className="font-display tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-white via-[#e8d6ff] to-pink-300">FORCÉ PULSO</span>
+                <StoreIcon className="w-4.5 h-4.5 text-[#e2ff3b] animate-pulse" />
+                <span className="font-display tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-white to-zinc-400">FORCÉ PULSO</span>
               </div>
             </div>
 
             {/* Price section of S CALLE (Dólar paralelo Yaracuy) */}
-            <div className="bg-[#18082c] border border-[#ff0080]/20 rounded-xl px-3 py-1.5 flex flex-col items-end text-right shadow-[0_0_12px_rgba(255,0,128,0.1)]">
-              <span className="text-[9px] uppercase tracking-wider text-[#a491bc] font-extrabold flex items-center gap-1">
-                <span>⚡</span> S CALLE
+            <div className="bg-[#1a1a1e] border border-[#e2ff3b]/25 rounded-2xl px-3.5 py-1.5 flex flex-col items-end text-right shadow-[0_0_12px_rgba(226,255,59,0.05)]">
+              <span className="text-[9px] uppercase tracking-wider text-gray-400 font-extrabold flex items-center gap-1">
+                <span className="text-[#e2ff3b]">⚡</span> S CALLE
               </span>
               <div className="flex items-center gap-1">
                 <span className="text-sm font-black font-mono text-white">Bs. {exchangeRate.rate.toFixed(2)}</span>
-                <span className="text-[10px] font-mono text-pink-500 flex items-center font-bold">
+                <span className="text-[10px] font-mono text-[#e2ff3b] flex items-center font-bold">
                   <ArrowUp className="w-2.5 h-2.5" />
                   +{exchangeRate.change}
                 </span>
               </div>
-              <span className="text-[8px] text-[#a491bc]/50 font-medium mt-0.5">act. {exchangeRate.lastUpdated}</span>
+              <span className="text-[8px] text-gray-500 font-medium mt-0.5">act. {exchangeRate.lastUpdated}</span>
             </div>
           </header>
 
           {/* Subheader context or title instruction */}
-          <div className="bg-[#140628] border-b border-[#ff0080]/15 px-5 py-2 text-center text-[10px] font-black text-pink-400 tracking-widest uppercase">
+          <div className="bg-[#141416] border-b border-zinc-900 px-5 py-2.5 text-center text-[10px] font-black text-[#e2ff3b] tracking-wider uppercase">
             {activeRole === 'aliado' ? (
               <span>🏪 PANEL DE REGISTRO COMERCIAL EN TIEMPO REAL</span>
             ) : activeRole === 'motorizado' ? (
@@ -856,9 +876,15 @@ export default function App() {
                   </div>
 
                   {/* Preset Quick Theme selectors */}
-                  <div className="bg-[#150a29]/80 border border-[#38166c]/40 p-4 rounded-xl shadow-[0_4px_12px_rgba(0,0,0,0.25)]">
-                    <span className="text-[10px] uppercase font-bold text-[#a491bc] block mb-2 font-display tracking-widest">Temas Preestablecidos</span>
-                    <div className="grid grid-cols-3 gap-2">
+                  <div className="bg-[#151518]/90 border border-[#2b2b30] p-4 rounded-xl shadow-[0_4px_12px_rgba(0,0,0,0.4)]">
+                    <span className="text-[10px] uppercase font-bold text-gray-400 block mb-2 font-display tracking-widest">Temas Preestablecidos</span>
+                    <div className="grid grid-cols-2 gap-2">
+                      <button
+                        onClick={() => applyPresetTheme('sora')}
+                        className="py-1.5 px-2 bg-black border border-[#e2ff3b]/40 rounded-lg text-[9px] text-[#e2ff3b] hover:bg-[#e2ff3b]/10 cursor-pointer font-bold uppercase transition-all"
+                      >
+                        Cyber Yellow 💛
+                      </button>
                       <button
                         onClick={() => applyPresetTheme('neon')}
                         className="py-1.5 px-2 bg-[#06020f] border border-pink-500/40 rounded-lg text-[9px] text-[#ebd3ff] hover:bg-pink-900/10 cursor-pointer font-bold uppercase transition-all"
@@ -1057,30 +1083,30 @@ export default function App() {
                   </div>
                 </div>
 
-                <div className="bg-[#120727] border border-[#a200ff]/15 p-3 rounded-xl text-[10px] text-[#a491bc] leading-relaxed mt-4">
+                <div className="bg-zinc-900 border border-zinc-800/80 p-3 rounded-xl text-[10px] text-gray-400 leading-relaxed mt-4">
                   <strong className="text-white font-display uppercase tracking-wide block mb-1">👑 Privilegios de Administrador:</strong>
                   <p>Cualquier cambio de color realizado aquí se propaga vía <strong>CSS variables</strong> instantáneamente a todo el ecosistema (paneles de vecindario, aliados y tracking).</p>
                 </div>
               </div>
             ) : activeRole === 'aliado' ? (
               <div className="p-5 space-y-5">
-                <div className="flex items-center justify-between border-b border-[#38166c]/30 pb-3.5">
+                <div className="flex items-center justify-between border-b border-zinc-900 pb-3.5">
                   <div>
                     <h3 className="text-sm font-black text-white uppercase tracking-wider flex items-center gap-2 font-display">
-                       <StoreIcon className="w-4 h-4 text-pink-400" />
+                       <StoreIcon className="w-4 h-4 text-[#e2ff3b]" />
                        <span>Panel de Aliado Comercial</span>
                     </h3>
-                    <p className="text-[10px] text-[#a491bc] mt-0.5 font-medium">Control directo de tu tienda en Forcé Pulso</p>
+                    <p className="text-[10px] text-gray-400 mt-0.5 font-medium">Control directo de tu tienda en Forcé Pulso</p>
                   </div>
                   
                   <div>
                     <select 
                       value={selectedAliadoStoreId}
                       onChange={(e) => setSelectedAliadoStoreId(e.target.value)}
-                      className="bg-[#180a30] border border-[#a200ff]/25 rounded-xl px-3 py-1.5 text-xs text-[#ebd3ff] uppercase font-extrabold outline-none cursor-pointer focus:border-pink-500/50"
+                      className="bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-1.5 text-xs text-white uppercase font-extrabold outline-none cursor-pointer focus:border-[#e2ff3b]/50"
                     >
                       {Object.entries(STORES).map(([id, store]) => (
-                        <option key={id} value={id} className="bg-[#180a30] text-white">{store.name}</option>
+                        <option key={id} value={id} className="bg-zinc-950 text-white">{store.name}</option>
                       ))}
                     </select>
                   </div>
@@ -1088,24 +1114,24 @@ export default function App() {
 
                 {/* Stats Block */}
                 <div className="grid grid-cols-3 gap-2.5 text-center">
-                  <div className="bg-[#150a29]/80 border border-[#38166c]/40 p-3 rounded-xl shadow-[0_4px_12px_rgba(0,0,0,0.2)]">
-                    <span className="text-[9px] uppercase font-bold text-[#a491bc] block mb-0.5 font-display tracking-wider">Ventas Hoy</span>
+                  <div className="bg-zinc-900 border border-zinc-800/80 p-3 rounded-xl shadow-[0_4px_12px_rgba(0,0,0,0.4)]">
+                    <span className="text-[9px] uppercase font-bold text-gray-400 block mb-0.5 font-display tracking-wider">Ventas Hoy</span>
                     <span className="text-xs font-display font-black text-white">4 Pedidos</span>
                   </div>
-                  <div className="bg-[#150a29]/80 border border-[#38166c]/40 p-3 rounded-xl shadow-[0_4px_12px_rgba(0,0,0,0.2)]">
-                    <span className="text-[9px] uppercase font-bold text-[#a491bc] block mb-0.5 font-display tracking-wider">Ingresos Est.</span>
-                    <span className="text-xs font-display font-black text-pink-400">$34.50</span>
+                  <div className="bg-zinc-900 border border-zinc-800/80 p-3 rounded-xl shadow-[0_4px_12px_rgba(0,0,0,0.4)]">
+                    <span className="text-[9px] uppercase font-bold text-gray-400 block mb-0.5 font-display tracking-wider">Ingresos Est.</span>
+                    <span className="text-xs font-display font-black text-[#e2ff3b]">$34.50</span>
                   </div>
-                  <div className="bg-[#150a29]/80 border border-[#38166c]/40 p-3 rounded-xl shadow-[0_4px_12px_rgba(0,0,0,0.2)]">
-                    <span className="text-[9px] uppercase font-bold text-[#a491bc] block mb-0.5 font-display tracking-wider">Factor &ldquo;CALLE&rdquo;</span>
-                    <span className="text-xs font-mono font-bold text-[#c18aff]">Bs. {exchangeRate.rate}</span>
+                  <div className="bg-zinc-900 border border-zinc-800/80 p-3 rounded-xl shadow-[0_4px_12px_rgba(0,0,0,0.4)]">
+                    <span className="text-[9px] uppercase font-bold text-gray-400 block mb-0.5 font-display tracking-wider">Factor &ldquo;CALLE&rdquo;</span>
+                    <span className="text-xs font-mono font-bold text-emerald-400">Bs. {exchangeRate.rate}</span>
                   </div>
                 </div>
 
                 <div className="space-y-4">
                   <div className="flex justify-between items-center">
-                    <span className="text-[10px] uppercase font-black tracking-widest text-[#a491bc] font-display">Inventario y Precios de la Tienda</span>
-                    <span className="text-[9px] text-[#ff0080]/80 italic font-semibold">Actualiza precios en tiempo real</span>
+                    <span className="text-[10px] uppercase font-black tracking-widest text-gray-400 font-display">Inventario y Precios de la Tienda</span>
+                    <span className="text-[9px] text-[#e2ff3b] italic font-semibold">Actualiza precios en tiempo real</span>
                   </div>
 
                   <div className="space-y-2 max-h-[380px] overflow-y-auto pr-1">
@@ -1213,16 +1239,16 @@ export default function App() {
             ) : activeRole === 'motorizado' ? (
               <div className="p-5 space-y-5 flex-1 flex flex-col justify-between">
                 <div className="space-y-4">
-                  <div className="flex items-center justify-between border-b border-[#38166c]/30 pb-3.5">
+                  <div className="flex items-center justify-between border-b border-zinc-900 pb-3.5">
                     <div>
                       <h3 className="text-sm font-black text-white uppercase tracking-wider flex items-center gap-2 font-display">
                         <span>🛵</span>
                         <span>Consola del Motorizado (Rider)</span>
                       </h3>
-                      <p className="text-[10px] text-[#a491bc] mt-0.5 font-medium">Acepta pedidos y gestiona el despacho Yaracuy</p>
+                      <p className="text-[10px] text-gray-400 mt-0.5 font-medium">Acepta pedidos y gestiona el despacho Yaracuy</p>
                     </div>
 
-                    <span className="px-2.5 py-0.5 bg-[#13072a] text-[#c18aff] text-[9px] font-black uppercase rounded border border-[#a200ff]/20 animate-pulse tracking-wide">
+                    <span className="px-2.5 py-0.5 bg-zinc-900 text-[#e2ff3b] text-[9px] font-black uppercase rounded border border-zinc-800 animate-pulse tracking-wide">
                       GPS ACTIVO
                     </span>
                   </div>
@@ -1230,20 +1256,20 @@ export default function App() {
                   {activeOrder ? (
                     <div className="space-y-4 text-xs">
                       {/* Active Delivery card details */}
-                      <div className="bg-[#100424]/90 border border-pink-500/25 p-4 rounded-2xl relative overflow-hidden space-y-3 shadow-lg">
-                        <div className="absolute top-0 right-0 bg-[#e60073] text-white text-[9px] font-extrabold px-3 py-1 rounded-bl-xl uppercase tracking-widest font-display">
+                      <div className="bg-zinc-900 border border-zinc-800 p-4 rounded-2xl relative overflow-hidden space-y-3 shadow-lg">
+                        <div className="absolute top-0 right-0 bg-[#e2ff3b] text-black text-[9px] font-extrabold px-3 py-1 rounded-bl-xl uppercase tracking-widest font-display">
                           {activeOrder.status}
                         </div>
 
                         <div className="space-y-1">
-                          <span className="text-[10px] font-bold text-[#c18aff] block font-mono">{activeOrder.id}</span>
+                          <span className="text-[10px] font-bold text-[#e2ff3b] block font-mono">{activeOrder.id}</span>
                           <h4 className="text-xs font-bold text-white">Entrega en: Calle 3, Sector Plaza Yara, San Felipe</h4>
-                          <span className="text-[10px] text-[#a491bc] block">
-                            Método de pago: <strong className="text-white uppercase font-mono">{activeOrder.paymentMethod}</strong> · Total: <strong className="text-pink-400 font-mono font-bold">${activeOrder.totalUsd.toFixed(2)}</strong>
+                          <span className="text-[10px] text-gray-400 block">
+                            Método de pago: <strong className="text-white uppercase font-mono">{activeOrder.paymentMethod}</strong> · Total: <strong className="text-[#e2ff3b] font-mono font-bold">${activeOrder.totalUsd.toFixed(2)}</strong>
                           </span>
                         </div>
 
-                        <div className="border-t border-[#38166c]/20 pt-2 max-h-[140px] overflow-y-auto space-y-1 text-[#a491bc]">
+                        <div className="border-t border-zinc-800 pt-2 max-h-[140px] overflow-y-auto space-y-1 text-gray-400">
                           {activeOrder.items.map((item, id) => (
                             <div key={id} className="flex justify-between">
                               <span>{item.quantity}x {item.product.name}</span>
@@ -1255,7 +1281,7 @@ export default function App() {
 
                       {/* Stepper control buttons */}
                       <div className="space-y-2">
-                        <label className="text-[10px] uppercase font-black tracking-widest text-[#a491bc] font-display">Progreso del Delivery</label>
+                        <label className="text-[10px] uppercase font-black tracking-widest text-[#e2ff3b] font-display">Progreso del Delivery</label>
                         <div className="grid grid-cols-2 gap-2 text-center text-[10px]">
                           <button 
                             type="button"
@@ -1271,7 +1297,7 @@ export default function App() {
                               setOrderStep(2);
                               triggerNotification("🛵 ¡Órden aceptada! Rumbo a la tienda.");
                             }}
-                            className="py-3 px-2 rounded-xl bg-[#180a30] border border-[#a200ff]/20 hover:bg-[#8100ff]/15 hover:border-[#ff0080]/50 text-white disabled:opacity-30 disabled:pointer-events-none transition-all font-bold cursor-pointer font-display uppercase tracking-wider"
+                            className="py-3 px-2 rounded-xl bg-zinc-900 border border-zinc-800 hover:bg-zinc-800 text-white disabled:opacity-30 disabled:pointer-events-none transition-all font-bold cursor-pointer font-display uppercase tracking-wider"
                           >
                             🤝 Aceptar Órden
                           </button>
@@ -1290,7 +1316,7 @@ export default function App() {
                               setOrderStep(3);
                               triggerNotification("🛍️ Pedido retirado de la tienda. En tránsito.");
                             }}
-                            className="py-3 px-2 rounded-xl bg-[#180a30] border border-[#a200ff]/20 hover:bg-[#8100ff]/15 hover:border-[#ff0080]/50 text-white disabled:opacity-30 disabled:pointer-events-none transition-all font-bold cursor-pointer font-display uppercase tracking-wider"
+                            className="py-3 px-2 rounded-xl bg-zinc-900 border border-zinc-800 hover:bg-zinc-800 text-white disabled:opacity-30 disabled:pointer-events-none transition-all font-bold cursor-pointer font-display uppercase tracking-wider"
                           >
                             🛍️ Retirar de tienda
                           </button>
@@ -1309,7 +1335,7 @@ export default function App() {
                               setOrderStep(4);
                               triggerNotification("📍 En ruta al destino del cliente.");
                             }}
-                            className="py-3 px-2 rounded-xl bg-[#180a30] border border-[#a200ff]/20 hover:bg-[#8100ff]/15 hover:border-[#ff0080]/50 text-white disabled:opacity-30 disabled:pointer-events-none transition-all font-bold cursor-pointer font-display uppercase tracking-wider"
+                            className="py-3 px-2 rounded-xl bg-zinc-900 border border-zinc-800 hover:bg-zinc-800 text-white disabled:opacity-30 disabled:pointer-events-none transition-all font-bold cursor-pointer font-display uppercase tracking-wider"
                           >
                             🛣️ En ruta al cliente
                           </button>
@@ -1328,23 +1354,23 @@ export default function App() {
                               setOrderStep(5);
                               triggerNotification("🎉 ¡Pedido entregado! Ecosistema completado.");
                             }}
-                            className="py-3 px-2 rounded-xl bg-gradient-to-r from-[#8100ff] to-[#d6006e] text-white hover:shadow-[0_0_15px_rgba(129,0,255,0.4)] disabled:opacity-30 disabled:pointer-events-none transition-all font-black col-span-2 cursor-pointer font-display uppercase tracking-widest text-[11px]"
+                            className="py-3 px-2 rounded-xl bg-[#e2ff3b] text-black hover:shadow-[0_0_15px_rgba(226,255,59,0.3)] disabled:opacity-30 disabled:pointer-events-none transition-all font-black col-span-2 cursor-pointer font-display uppercase tracking-widest text-[11px]"
                           >
                             🏁 Entregar Pedido
                           </button>
                         </div>
                       </div>
 
-                      <p className="text-[10px] text-[#a491bc]/60 leading-relaxed italic text-center">
+                      <p className="text-[10px] text-gray-500 leading-relaxed italic text-center">
                         Pulsar los pasos anteriores actualizará inmediatamente la pantalla de tracking de entrega que recibe tu cliente en tiempo real.
                       </p>
                     </div>
                   ) : (
-                    <div className="py-12 px-4 text-center rounded-2xl bg-[#14062a]/95 border border-[#a200ff]/20 space-y-4 flex-1 flex flex-col justify-center items-center shadow-lg">
+                    <div className="py-12 px-4 text-center rounded-2xl bg-zinc-900/60 border border-zinc-800 space-y-4 flex-1 flex flex-col justify-center items-center shadow-lg">
                       <div className="text-4xl animate-bounce">📭</div>
                       <div className="space-y-1">
                         <h4 className="text-xs font-bold font-display uppercase text-white tracking-wider">Sin Pedidos Asignados</h4>
-                        <p className="text-[10px] text-[#a491bc] leading-relaxed max-w-sm mx-auto">
+                        <p className="text-[10px] text-gray-400 leading-relaxed max-w-sm mx-auto">
                           No hay solicitudes de delivery activas de clientes en San Felipe en este momento.
                         </p>
                       </div>
@@ -1383,7 +1409,7 @@ export default function App() {
                           setOrderStep(1);
                           triggerNotification("🔔 ¡Nueva órden simulada recibida!");
                         }}
-                        className="px-5 py-3 bg-gradient-to-r from-[#8100ff] to-[#d6006e] hover:brightness-110 text-white font-extrabold text-[9px] tracking-widest uppercase rounded-full transition-all cursor-pointer shadow-[0_4px_15px_rgba(129,0,255,0.4)]"
+                        className="px-5 py-3 bg-[#e2ff3b] text-black font-extrabold text-[9px] tracking-widest uppercase rounded-full transition-all cursor-pointer shadow-[0_4px_15px_rgba(226,255,59,0.2)]"
                       >
                         Crear pedido de prueba instantáneo
                       </button>
@@ -1391,7 +1417,7 @@ export default function App() {
                   )}
                 </div>
 
-                <div className="bg-[#120727] border border-[#a200ff]/15 p-3 rounded-xl text-[10px] text-[#a491bc] leading-relaxed">
+                <div className="bg-zinc-900 border border-zinc-800/80 p-3 rounded-xl text-[10px] text-gray-400 leading-relaxed">
                   <strong className="text-white font-display uppercase tracking-wide block mb-1">💡 Cómo Probar el Ciclo Completo:</strong>
                   <ul className="list-disc pl-4 mt-1 space-y-1">
                     <li>Paso 1: Ve a <strong className="text-white">"Cliente"</strong>, agrega algo al carrito y haz el checkout.</li>
@@ -1411,7 +1437,7 @@ export default function App() {
                 {!orderConfirmed && (
                   <button 
                     onClick={() => setIsCheckingOut(false)}
-                    className="flex items-center gap-2 text-xs font-semibold text-[#888] hover:text-white transition-colors"
+                    className="flex items-center gap-2 text-xs font-semibold text-[#888] hover:text-[#e2ff3b] transition-colors"
                   >
                     <ChevronLeft className="w-4 h-4" />
                     <span>Volver a la Lista</span>
@@ -1420,8 +1446,8 @@ export default function App() {
 
                 {!orderConfirmed ? (
                   <>
-                    <h2 className="text-lg font-bold text-white tracking-tight flex items-center gap-2 border-b border-[#222] pb-3">
-                      <ShoppingBag className="w-5 h-5 text-emerald-500" />
+                    <h2 className="text-lg font-bold text-white tracking-tight flex items-center gap-2 border-b border-zinc-800 pb-3">
+                      <ShoppingBag className="w-5 h-5 text-[#e2ff3b]" />
                       <span>Tu Carrito</span>
                     </h2>
 
@@ -1433,7 +1459,7 @@ export default function App() {
                         <p className="text-sm text-[#777]">Tu carrito está vacío</p>
                         <button 
                           onClick={() => setIsCheckingOut(false)}
-                          className="px-5 py-2 bg-[#1c1c1c] text-sm text-white font-medium rounded-xl hover:bg-emerald-600 transition-colors"
+                          className="px-5 py-2 bg-zinc-900 text-sm text-[#e2ff3b] font-black uppercase tracking-widest rounded-xl hover:bg-[#e2ff3b] hover:text-black transition-all"
                         >
                           Explorar Alimentos
                         </button>
@@ -1442,17 +1468,17 @@ export default function App() {
                       <div className="space-y-5">
                         
                         {/* Selected goods */}
-                        <div className="space-y-3 bg-[#0d0d0d] p-3 rounded-xl border border-[#222]">
+                        <div className="space-y-3 bg-[#0d0d0d] p-3 rounded-xl border border-zinc-800">
                           {cart.map((item, idx) => (
-                            <div key={`${item.product.id}-${item.store.storeId}-${idx}`} className="flex items-center justify-between py-2 border-b border-[#1c1c1c] last:border-b-0">
+                            <div key={`${item.product.id}-${item.store.storeId}-${idx}`} className="flex items-center justify-between py-2 border-b border-zinc-900 last:border-b-0">
                               <div className="flex items-start gap-2.5">
-                                <span className="text-xl p-1.5 bg-[#141414] rounded-lg border border-[#222]">
+                                <span className="text-xl p-1.5 bg-[#141414] rounded-lg border border-zinc-800">
                                   {item.product.icon}
                                 </span>
                                 <div>
                                   <h4 className="text-xs font-bold text-white">{item.product.name}</h4>
                                   <span className="text-[10px] text-[#777] block">
-                                    Adquirido en: <strong className="text-emerald-400">{item.store.name}</strong>
+                                    Adquirido en: <strong className="text-[#e2ff3b]">{item.store.name}</strong>
                                   </span>
                                   <span className="text-[10px] font-semibold text-[#555]">
                                     ${item.store.price.toFixed(2)} c/u
@@ -1461,7 +1487,7 @@ export default function App() {
                               </div>
 
                               {/* Quantity selectors */}
-                              <div className="flex items-center gap-2 bg-[#121212] border border-[#222] p-1.5 rounded-xl shrink-0">
+                              <div className="flex items-center gap-2 bg-[#121212] border border-zinc-800 p-1.5 rounded-xl shrink-0">
                                 <button 
                                   onClick={() => handleUpdateQuantity(item.product.id, item.store.storeId, -1)}
                                   className="w-5 h-5 rounded-md bg-[#181818] flex items-center justify-center text-[#bbb] active:bg-red-950/20 active:text-red-400"
@@ -1471,7 +1497,7 @@ export default function App() {
                                 <span className="text-xs font-mono font-bold px-1 text-white">{item.quantity}</span>
                                 <button 
                                   onClick={() => handleUpdateQuantity(item.product.id, item.store.storeId, 1)}
-                                  className="w-5 h-5 rounded-md bg-[#181818] flex items-center justify-center text-[#bbb] active:bg-green-950/20 active:text-emerald-400"
+                                  className="w-5 h-5 rounded-md bg-[#181818] flex items-center justify-center text-[#bbb] active:bg-zinc-800 active:text-[#e2ff3b]"
                                 >
                                   <Plus className="w-3 h-3" />
                                 </button>
@@ -1489,24 +1515,24 @@ export default function App() {
                               onClick={() => setDeliveryType('delivery')}
                               className={`p-3 rounded-xl border flex flex-col items-center justify-center gap-1 transition-all text-center ${
                                 deliveryType === 'delivery' 
-                                  ? 'bg-emerald-950/25 border-emerald-500/50 text-emerald-400 font-bold shadow-lg shadow-emerald-900/10'
-                                  : 'bg-[#0d0d0d] border-[#222] text-[#888]'
+                                  ? 'bg-[#e2ff3b]/10 border-[#e2ff3b] text-[#e2ff3b] font-bold shadow-lg shadow-[#e2ff3b]/10'
+                                  : 'bg-[#0d0d0d] border-zinc-800 text-[#888]'
                               }`}
                             >
                               <span className="text-xs">🛵 Delivery</span>
-                              <span className="text-[10px] text-[#666] font-mono">+$1.00</span>
+                              <span className="text-[10px] text-gray-500 font-mono">+$1.00</span>
                             </button>
                             <button
                               type="button"
                               onClick={() => setDeliveryType('recoger')}
                               className={`p-3 rounded-xl border flex flex-col items-center justify-center gap-1 transition-all text-center ${
                                 deliveryType === 'recoger' 
-                                  ? 'bg-emerald-950/25 border-emerald-500/50 text-emerald-400 font-bold shadow-lg shadow-emerald-900/10'
-                                  : 'bg-[#0d0d0d] border-[#222] text-[#888]'
+                                  ? 'bg-[#e2ff3b]/10 border-[#e2ff3b] text-[#e2ff3b] font-bold shadow-lg shadow-[#e2ff3b]/10'
+                                  : 'bg-[#0d0d0d] border-zinc-800 text-[#888]'
                               }`}
                             >
                               <span className="text-xs">🏪 Recoger en Persona</span>
-                              <span className="text-[10px] text-emerald-555 font-mono text-emerald-500">Gratis</span>
+                              <span className="text-[10px] font-mono text-[#e2ff3b]">Gratis</span>
                             </button>
                           </div>
                         </div>
@@ -1531,12 +1557,12 @@ export default function App() {
                                   onClick={() => setPaymentMethod(method)}
                                   className={`py-2 px-1 text-[10px] font-bold rounded-lg border text-center flex flex-col items-center justify-center transition-all ${
                                     isActive 
-                                      ? 'bg-emerald-500/10 border-emerald-500 text-white' 
-                                      : 'bg-[#0b0b0b] border-[#1c1c1c] text-[#777] hover:text-[#aaa]'
+                                      ? 'bg-[#e2ff3b]/10 border-[#e2ff3b] text-white' 
+                                      : 'bg-[#0b0b0b] border-zinc-800 text-[#777] hover:text-[#aaa]'
                                   }`}
                                 >
                                   {method === 'wallet' && (
-                                    <span className="block text-[8px] text-emerald-400 font-mono">${userWallet.toFixed(1)}</span>
+                                    <span className="block text-[8px] text-[#e2ff3b] font-mono">${userWallet.toFixed(1)}</span>
                                   )}
                                   <span>{labels[method]}</span>
                                 </button>
@@ -1546,20 +1572,20 @@ export default function App() {
                         </div>
 
                         {/* Pricing Bill Summary break */}
-                        <div className="bg-[#0b0b0b] p-4 rounded-xl border border-[#222] space-y-2 text-xs">
+                        <div className="bg-zinc-950 p-4 rounded-xl border border-zinc-900 space-y-2 text-xs">
                           <div className="flex justify-between">
-                            <span className="text-[#646464]">Subtotal</span>
+                            <span className="text-gray-500">Subtotal</span>
                             <span className="text-white font-mono">${cartSubtotal.toFixed(2)}</span>
                           </div>
                           
                           <div className="flex justify-between">
-                            <span className="text-[#646464]">Delivery Forcé</span>
+                            <span className="text-gray-500">Delivery Forcé</span>
                             <span className="text-white font-mono">
                               {deliveryFee > 0 ? `+$${deliveryFee.toFixed(2)}` : 'Gratis'}
                             </span>
                           </div>
 
-                          <div className="flex justify-between text-emerald-400 font-medium">
+                          <div className="flex justify-between text-[#e2ff3b] font-medium">
                             <span className="flex items-center gap-1">
                               <Sparkles className="w-3.5 h-3.5" />
                               <span>Cashback</span>
@@ -1567,10 +1593,10 @@ export default function App() {
                             <span className="font-mono">+${cashbackEarned.toFixed(2)}</span>
                           </div>
 
-                          <div className="border-t border-[#1c1c1c] pt-2 mt-2 flex justify-between items-end">
+                          <div className="border-t border-zinc-900 pt-2 mt-2 flex justify-between items-end">
                             <span className="text-xs font-bold text-white uppercase tracking-wider">TOTAL</span>
                             <div className="text-right">
-                              <span className="text-xl font-extrabold font-mono text-emerald-400 block">
+                              <span className="text-xl font-extrabold font-mono text-[#e2ff3b] block">
                                 ${cartTotalUsd.toFixed(2)}
                               </span>
                               <span className="text-[10px] font-mono text-[#666]">
@@ -1585,10 +1611,10 @@ export default function App() {
                           type="button"
                           onClick={handleConfirmOrder}
                           disabled={cart.length === 0}
-                          className="w-full py-3.5 bg-emerald-600 hover:bg-emerald-500 active:scale-[0.98] disabled:bg-[#1a1a1a] disabled:text-[#444] text-black font-extrabold text-xs tracking-widest uppercase rounded-xl transition-all shadow-lg shadow-emerald-950/20 flex items-center justify-center gap-2 cursor-pointer"
+                          className="w-full py-3.5 bg-[#e2ff3b] hover:bg-[#e2ff3b]/95 active:scale-[0.98] disabled:bg-[#1a1a1a] disabled:text-[#444] text-black font-extrabold text-xs tracking-widest uppercase rounded-xl transition-all shadow-lg shadow-[#e2ff3b]/15 flex items-center justify-center gap-2 cursor-pointer"
                         >
                           <CheckCircle2 className="w-4 h-4 text-black" />
-                          <span>Confirmar Pedido - ${cartTotalUsd.toFixed(2)}</span>
+                          <span>Confirmar Pedido · ${cartTotalUsd.toFixed(2)}</span>
                         </button>
 
                       </div>
@@ -1597,30 +1623,30 @@ export default function App() {
                 ) : (
                   // Success State screen
                   <div className="py-6 text-center space-y-6 animate-fadeIn">
-                    <div className="w-16 h-16 rounded-full bg-emerald-950 border-2 border-emerald-500 flex items-center justify-center mx-auto text-emerald-400">
+                    <div className="w-16 h-16 rounded-full bg-[#e2ff3b]/10 border-2 border-[#e2ff3b] flex items-center justify-center mx-auto text-[#e2ff3b]">
                       <CheckCircle2 className="w-8 h-8 lg:w-10 lg:h-10" />
                     </div>
 
                     <div className="space-y-2">
                       <h2 className="text-2xl font-black text-white tracking-widest uppercase">¡Pedido Enviado!</h2>
-                      <p className="text-xs text-emerald-400 font-semibold italic">Tu motorizado Forcé está en camino ...</p>
+                      <p className="text-xs text-[#e2ff3b] font-semibold italic">Tu motorizado Forcé está en camino ...</p>
                       <p className="text-xs text-[#777]">Tiempo de entrega estimado: <strong className="text-white font-mono">15 - 25 min</strong></p>
                     </div>
 
                     {/* Receipt recap badge */}
-                    <div className="bg-[#0c0c0c] border border-[#222] p-4 rounded-2xl max-w-xs mx-auto text-xs space-y-1">
+                    <div className="bg-[#0c0c0c] border border-zinc-800 p-4 rounded-2xl max-w-xs mx-auto text-xs space-y-1">
                       <div className="text-[#666] tracking-wider uppercase text-[10px] font-bold">TOTAL PAGADO</div>
-                      <div className="text-2xl font-bold text-emerald-400 font-mono">${cartTotalUsd.toFixed(2)}</div>
+                      <div className="text-2xl font-bold text-[#e2ff3b] font-mono">${cartTotalUsd.toFixed(2)}</div>
                       <div className="text-[10px] text-[#555]">pagado vía <strong className="text-white uppercase">{paymentMethod}</strong></div>
                     </div>
 
-                    <div className="bg-[#121212] border border-[#222]/50 p-3 rounded-xl max-w-xs mx-auto flex items-center justify-center gap-2 text-xs">
-                      <Award className="w-4 h-4 text-emerald-500 shrink-0" />
+                    <div className="bg-[#121212] border border-zinc-800/50 p-3 rounded-xl max-w-xs mx-auto flex items-center justify-center gap-2 text-xs">
+                      <Award className="w-4 h-4 text-[#e2ff3b] shrink-0" />
                       <span className="text-[#999]">Ganaste <strong>$0.30</strong> directos a tu Forcé Wallet</span>
                     </div>
 
                     {/* Micro simulated map animation of delivery rider */}
-                    <div className="border border-[#222] bg-[#0c0c0c] rounded-xl overflow-hidden p-3 relative h-40">
+                    <div className="border border-zinc-800 bg-[#0d0d0e] rounded-xl overflow-hidden p-3 relative h-40">
                       <div className="absolute inset-0 opacity-15 bg-[radial-gradient(circle_at_center,_#333_1px,_transparent_1px)] bg-[size:12px_12px]"></div>
 
                       {/* Path lines */}
