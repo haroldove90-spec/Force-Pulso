@@ -45,7 +45,133 @@ export default function App() {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   
   // Custom Role Simulation Settings
-  const [activeRole, setActiveRole] = useState<'cliente' | 'colaborador' | 'aliado' | 'motorizado'>('cliente');
+  const [activeRole, setActiveRole] = useState<'cliente' | 'colaborador' | 'aliado' | 'motorizado' | 'admin'>('cliente');
+
+  // Color Customization State
+  const [dashboardColors, setDashboardColors] = useState(() => {
+    const saved = localStorage.getItem('force_pulso_colors');
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch (e) {
+        // ignore
+      }
+    }
+    return {
+      bgStart: '#06020f',
+      bgEnd: '#030107',
+      primary: '#8100ff',
+      secondary: '#d6006e',
+      accent: '#ff0080',
+      cardBg: 'rgba(18, 9, 36, 0.52)',
+      cardHeavy: 'rgba(11, 4, 25, 0.85)',
+      textMain: '#f1ecf9',
+      textMuted: '#a491bc',
+      borderPrimary: 'rgba(145, 0, 255, 0.22)',
+      borderSecondary: 'rgba(230, 0, 115, 0.22)'
+    };
+  });
+
+  const handleColorChange = (key: string, value: string) => {
+    let updatedValue = value;
+    if (key === 'cardBg' && !value.startsWith('rgba')) {
+      const r = parseInt(value.slice(1, 3), 16);
+      const g = parseInt(value.slice(3, 5), 16);
+      const b = parseInt(value.slice(5, 7), 16);
+      updatedValue = `rgba(${r}, ${g}, ${b}, 0.52)`;
+    } else if (key === 'cardHeavy' && !value.startsWith('rgba')) {
+      const r = parseInt(value.slice(1, 3), 16);
+      const g = parseInt(value.slice(3, 5), 16);
+      const b = parseInt(value.slice(5, 7), 16);
+      updatedValue = `rgba(${r}, ${g}, ${b}, 0.85)`;
+    } else if (key === 'borderPrimary' && !value.startsWith('rgba')) {
+      const r = parseInt(value.slice(1, 3), 16);
+      const g = parseInt(value.slice(3, 5), 16);
+      const b = parseInt(value.slice(5, 7), 16);
+      updatedValue = `rgba(${r}, ${g}, ${b}, 0.22)`;
+    } else if (key === 'borderSecondary' && !value.startsWith('rgba')) {
+      const r = parseInt(value.slice(1, 3), 16);
+      const g = parseInt(value.slice(3, 5), 16);
+      const b = parseInt(value.slice(5, 7), 16);
+      updatedValue = `rgba(${r}, ${g}, ${b}, 0.22)`;
+    }
+
+    const updated = {
+      ...dashboardColors,
+      [key]: updatedValue
+    };
+    setDashboardColors(updated);
+    localStorage.setItem('force_pulso_colors', JSON.stringify(updated));
+  };
+
+  const resetColors = () => {
+    const defaults = {
+      bgStart: '#06020f',
+      bgEnd: '#030107',
+      primary: '#8100ff',
+      secondary: '#d6006e',
+      accent: '#ff0080',
+      cardBg: 'rgba(18, 9, 36, 0.52)',
+      cardHeavy: 'rgba(11, 4, 25, 0.85)',
+      textMain: '#f1ecf9',
+      textMuted: '#a491bc',
+      borderPrimary: 'rgba(145, 0, 255, 0.22)',
+      borderSecondary: 'rgba(230, 0, 115, 0.22)'
+    };
+    setDashboardColors(defaults);
+    localStorage.setItem('force_pulso_colors', JSON.stringify(defaults));
+    triggerNotification("🔄 Colores de la consola restablecidos");
+  };
+
+  const applyPresetTheme = (theme: 'neon' | 'emerald' | 'sunset') => {
+    let selectedTheme = {};
+    if (theme === 'neon') {
+      selectedTheme = {
+        bgStart: '#040114',
+        bgEnd: '#010005',
+        primary: '#cf00ff',
+        secondary: '#ff0055',
+        accent: '#ff00ff',
+        cardBg: 'rgba(20, 5, 40, 0.6)',
+        cardHeavy: 'rgba(14, 2, 28, 0.9)',
+        textMain: '#fbe2ff',
+        textMuted: '#d399e5',
+        borderPrimary: 'rgba(207, 0, 255, 0.3)',
+        borderSecondary: 'rgba(255, 0, 85, 0.3)'
+      };
+    } else if (theme === 'emerald') {
+      selectedTheme = {
+        bgStart: '#020d08',
+        bgEnd: '#000402',
+        primary: '#10b981',
+        secondary: '#059669',
+        accent: '#34d399',
+        cardBg: 'rgba(9, 34, 21, 0.55)',
+        cardHeavy: 'rgba(4, 21, 13, 0.88)',
+        textMain: '#ecfdf5',
+        textMuted: '#a7f3d0',
+        borderPrimary: 'rgba(16, 185, 129, 0.25)',
+        borderSecondary: 'rgba(52, 211, 153, 0.25)'
+      };
+    } else if (theme === 'sunset') {
+      selectedTheme = {
+        bgStart: '#140502',
+        bgEnd: '#070100',
+        primary: '#f97316',
+        secondary: '#ea580c',
+        accent: '#f43f5e',
+        cardBg: 'rgba(40, 10, 5, 0.65)',
+        cardHeavy: 'rgba(25, 5, 2, 0.92)',
+        textMain: '#fff5f3',
+        textMuted: '#fecdd3',
+        borderPrimary: 'rgba(249, 115, 22, 0.28)',
+        borderSecondary: 'rgba(244, 63, 94, 0.28)'
+      };
+    }
+    setDashboardColors(selectedTheme);
+    localStorage.setItem('force_pulso_colors', JSON.stringify(selectedTheme));
+    triggerNotification(`🎨 Tema preestablecido "${theme}" aplicado con éxito`);
+  };
   const [selectedAliadoStoreId, setSelectedAliadoStoreId] = useState<string>('mercado-el-valle');
   const [activeOrder, setActiveOrder] = useState<{
     id: string;
@@ -539,6 +665,23 @@ export default function App() {
   return (
     <div className="min-h-screen bg-[#06020f] text-[#f1ecf9] font-sans flex flex-col antialiased">
       
+      {/* Dynamic Style overrides for user customization in real-time */}
+      <style dangerouslySetInnerHTML={{ __html: `
+        :root {
+          --color-bg-start: ${dashboardColors.bgStart} !important;
+          --color-bg-end: ${dashboardColors.bgEnd} !important;
+          --color-primary: ${dashboardColors.primary} !important;
+          --color-secondary: ${dashboardColors.secondary} !important;
+          --color-accent: ${dashboardColors.accent} !important;
+          --color-card-bg: ${dashboardColors.cardBg} !important;
+          --color-card-heavy: ${dashboardColors.cardHeavy} !important;
+          --color-border-primary: ${dashboardColors.borderPrimary} !important;
+          --color-border-secondary: ${dashboardColors.borderSecondary} !important;
+          --color-text-main: ${dashboardColors.textMain} !important;
+          --color-text-muted: ${dashboardColors.textMuted} !important;
+        }
+      ` }} />
+
       {/* Floating Status / Toast notification for crowdsourcing actions with intense glow */}
       {showRewardNotification && (
         <div className="fixed top-5 left-1/2 -translate-x-1/2 z-50 bg-[#16062b] border border-[#ff0080]/55 px-6 py-3.5 rounded-full flex items-center gap-2.5 shadow-[0_0_35px_rgba(255,0,128,0.5)] animate-bounce text-sm max-w-sm text-center">
@@ -556,20 +699,20 @@ export default function App() {
             <span className="text-xs text-[#ebd3ff] font-medium leading-none">Intercambia roles para probar Forcé Pulso desde cada perspectiva:</span>
           </div>
           
-          <div className="grid grid-cols-4 gap-1.5 w-full md:w-auto max-w-lg">
+          <div className="grid grid-cols-5 gap-1 w-full md:w-auto max-w-xl">
             <button 
               onClick={() => {
                 setActiveRole('cliente');
                 triggerNotification("🛒 Sesión: Rol Cliente habilitado");
               }}
-              className={`py-2 px-3 text-[10px] tracking-wider uppercase font-black rounded-full transition-all duration-300 flex items-center justify-center gap-1.5 cursor-pointer ${
+              className={`py-2 px-2 text-[9px] tracking-wider uppercase font-black rounded-full transition-all duration-300 flex items-center justify-center gap-1 cursor-pointer ${
                 activeRole === 'cliente' 
                   ? 'bg-gradient-to-r from-[#8100ff] to-[#d6006e] text-white shadow-[0_0_15px_rgba(129,0,255,0.4)] border-transparent' 
                   : 'bg-[#1b0d35]/65 text-[#a491bc] hover:text-white hover:bg-[#2c135c]/80 border border-[#38166c]/40'
               }`}
             >
               <span>🛒</span>
-              <span>Cliente</span>
+              <span className="hidden sm:inline">Cliente</span>
             </button>
 
             <button 
@@ -577,14 +720,14 @@ export default function App() {
                 setActiveRole('colaborador');
                 triggerNotification("📝 Sesión: Rol Colaborador (Vecino/Reportero) habilitado");
               }}
-              className={`py-2 px-3 text-[10px] tracking-wider uppercase font-black rounded-full transition-all duration-300 flex items-center justify-center gap-1.5 cursor-pointer ${
+              className={`py-2 px-2 text-[9px] tracking-wider uppercase font-black rounded-full transition-all duration-300 flex items-center justify-center gap-1 cursor-pointer ${
                 activeRole === 'colaborador' 
                   ? 'bg-gradient-to-r from-[#8100ff] to-[#d6006e] text-white shadow-[0_0_15px_rgba(129,0,255,0.4)] border-transparent' 
                   : 'bg-[#1b0d35]/65 text-[#a491bc] hover:text-white hover:bg-[#2c135c]/80 border border-[#38166c]/40'
               }`}
             >
               <span>📝</span>
-              <span>Vecino</span>
+              <span className="hidden sm:inline">Vecino</span>
             </button>
 
             <button 
@@ -592,14 +735,14 @@ export default function App() {
                 setActiveRole('aliado');
                 triggerNotification("🏪 Sesión: Rol Aliado Comercial (Bodega) habilitado");
               }}
-              className={`py-2 px-3 text-[10px] tracking-wider uppercase font-black rounded-full transition-all duration-300 flex items-center justify-center gap-1.5 cursor-pointer ${
+              className={`py-2 px-2 text-[9px] tracking-wider uppercase font-black rounded-full transition-all duration-300 flex items-center justify-center gap-1 cursor-pointer ${
                 activeRole === 'aliado' 
                   ? 'bg-gradient-to-r from-[#8100ff] to-[#d6006e] text-white shadow-[0_0_15px_rgba(129,0,255,0.4)] border-transparent' 
                   : 'bg-[#1b0d35]/65 text-[#a491bc] hover:text-white hover:bg-[#2c135c]/80 border border-[#38166c]/40'
               }`}
             >
               <span>🏪</span>
-              <span>Tienda</span>
+              <span className="hidden sm:inline">Tienda</span>
             </button>
 
             <button 
@@ -607,14 +750,29 @@ export default function App() {
                 setActiveRole('motorizado');
                 triggerNotification("🛵 Sesión: Rol Motorizado (Rider) habilitado");
               }}
-              className={`py-2 px-3 text-[10px] tracking-wider uppercase font-black rounded-full transition-all duration-300 flex items-center justify-center gap-1.5 cursor-pointer ${
+              className={`py-2 px-2 text-[9px] tracking-wider uppercase font-black rounded-full transition-all duration-300 flex items-center justify-center gap-1 cursor-pointer ${
                 activeRole === 'motorizado' 
                   ? 'bg-gradient-to-r from-[#8100ff] to-[#d6006e] text-white shadow-[0_0_15px_rgba(129,0,255,0.4)] border-transparent' 
                   : 'bg-[#1b0d35]/65 text-[#a491bc] hover:text-white hover:bg-[#2c135c]/80 border border-[#38166c]/40'
               }`}
             >
               <span>🛵</span>
-              <span>Rider</span>
+              <span className="hidden sm:inline">Rider</span>
+            </button>
+
+            <button 
+              onClick={() => {
+                setActiveRole('admin');
+                triggerNotification("⚙️ Sesión: Rol Administrador habilitado");
+              }}
+              className={`py-2 px-2 text-[9px] tracking-wider uppercase font-black rounded-full transition-all duration-300 flex items-center justify-center gap-1 cursor-pointer ${
+                activeRole === 'admin' 
+                  ? 'bg-gradient-to-r from-[#8100ff] to-[#d6006e] text-white shadow-[0_0_15px_rgba(129,0,255,0.4)] border-transparent' 
+                  : 'bg-[#1b0d35]/65 text-[#a491bc] hover:text-white hover:bg-[#2c135c]/80 border border-[#38166c]/40'
+              }`}
+            >
+              <span>⚙️</span>
+              <span className="hidden sm:inline">Admin</span>
             </button>
           </div>
         </div>
@@ -667,6 +825,8 @@ export default function App() {
               <span>🏪 PANEL DE REGISTRO COMERCIAL EN TIEMPO REAL</span>
             ) : activeRole === 'motorizado' ? (
               <span>🛵 SIMULADOR DE DESPACHO PARA MOTORIZADO ACTIVE</span>
+            ) : activeRole === 'admin' ? (
+              <span>⚙️ PERSONALIZACIÓN DE PREFERENCIAS Y COLORES DE DASHBOARD (ADMIN)</span>
             ) : (
               <span>TOCA UN PRODUCTO PARA VER DÓNDE ENCONTRARLO</span>
             )}
@@ -675,7 +835,234 @@ export default function App() {
           {/* MAIN LIST VIEW OR DETAIL COMPARE VIEWER */}
           <div className="flex-1 overflow-y-auto flex flex-col">
             
-            {activeRole === 'aliado' ? (
+            {activeRole === 'admin' ? (
+              <div className="p-5 space-y-5 flex-grow flex flex-col justify-between overflow-y-auto">
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between border-b border-[#38166c]/30 pb-3.5">
+                    <div>
+                      <h3 className="text-sm font-black text-white uppercase tracking-wider flex items-center gap-2 font-display">
+                         <span className="text-pink-400">⚙️</span>
+                         <span>Módulo de Preferencias de Color</span>
+                      </h3>
+                      <p className="text-[10px] text-[#a491bc] mt-0.5 font-medium">Personaliza y redefine el estilo visual de Forcé Pulso en tiempo real</p>
+                    </div>
+                    
+                    <button
+                      onClick={resetColors}
+                      className="px-3 py-1.5 bg-[#240e44]/85 text-[#ebd3ff] text-[10px] font-black uppercase rounded-lg border border-[#a200ff]/30 hover:border-pink-500/50 hover:bg-pink-900/40 hover:text-white transition-all cursor-pointer"
+                    >
+                      Restablecer
+                    </button>
+                  </div>
+
+                  {/* Preset Quick Theme selectors */}
+                  <div className="bg-[#150a29]/80 border border-[#38166c]/40 p-4 rounded-xl shadow-[0_4px_12px_rgba(0,0,0,0.25)]">
+                    <span className="text-[10px] uppercase font-bold text-[#a491bc] block mb-2 font-display tracking-widest">Temas Preestablecidos</span>
+                    <div className="grid grid-cols-3 gap-2">
+                      <button
+                        onClick={() => applyPresetTheme('neon')}
+                        className="py-1.5 px-2 bg-[#06020f] border border-pink-500/40 rounded-lg text-[9px] text-[#ebd3ff] hover:bg-pink-900/10 cursor-pointer font-bold uppercase transition-all"
+                      >
+                        Cyber Neon 👾
+                      </button>
+                      <button
+                        onClick={() => applyPresetTheme('emerald')}
+                        className="py-1.5 px-2 bg-[#020d08] border border-emerald-500/40 rounded-lg text-[9px] text-[#e3ffd3] hover:bg-emerald-900/10 cursor-pointer font-bold uppercase transition-all"
+                      >
+                        Abasto Verde 🥦
+                      </button>
+                      <button
+                        onClick={() => applyPresetTheme('sunset')}
+                        className="py-1.5 px-2 bg-[#0f0402] border border-orange-500/40 rounded-lg text-[9px] text-[#ffebe3] hover:bg-orange-900/10 cursor-pointer font-bold uppercase transition-all"
+                      >
+                        Atardecer Yara 🌅
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Individual Color Customizers */}
+                  <div className="space-y-3 pr-1">
+                    <span className="text-[10px] uppercase font-black tracking-widest text-[#a491bc] font-display block">Paleta de Colores del Dashboard</span>
+                    
+                    {/* Background Start */}
+                    <div className="p-3 bg-[#13072a]/70 border border-[#38166c]/30 rounded-xl flex items-center justify-between gap-3 hover:border-[#a200ff]/30 transition-all">
+                      <div className="space-y-0.5">
+                        <span className="text-xs font-bold text-white block">Inicio del Fondo</span>
+                        <span className="text-[9px] text-[#a491bc] block">Degradado global (arriba)</span>
+                      </div>
+                      <div className="flex items-center gap-2 font-mono text-[10px]">
+                        <span className="text-white">{dashboardColors.bgStart}</span>
+                        <input 
+                          type="color" 
+                          value={dashboardColors.bgStart}
+                          onChange={(e) => handleColorChange('bgStart', e.target.value)}
+                          className="w-8 h-8 rounded border-none bg-transparent cursor-pointer outline-none shrink-0"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Background End */}
+                    <div className="p-3 bg-[#13072a]/70 border border-[#38166c]/30 rounded-xl flex items-center justify-between gap-3 hover:border-[#a200ff]/30 transition-all">
+                      <div className="space-y-0.5">
+                        <span className="text-xs font-bold text-white block">Fin del Fondo</span>
+                        <span className="text-[9px] text-[#a491bc] block">Degradado global (abajo)</span>
+                      </div>
+                      <div className="flex items-center gap-2 font-mono text-[10px]">
+                        <span className="text-white">{dashboardColors.bgEnd}</span>
+                        <input 
+                          type="color" 
+                          value={dashboardColors.bgEnd}
+                          onChange={(e) => handleColorChange('bgEnd', e.target.value)}
+                          className="w-8 h-8 rounded border-none bg-transparent cursor-pointer outline-none shrink-0"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Primary Glow Color */}
+                    <div className="p-3 bg-[#13072a]/70 border border-[#38166c]/30 rounded-xl flex items-center justify-between gap-3 hover:border-[#a200ff]/30 transition-all">
+                      <div className="space-y-0.5">
+                        <span className="text-xs font-bold text-white block">Color Primario (Glow)</span>
+                        <span className="text-[9px] text-[#a491bc] block font-medium">Botones y resplandores primarios</span>
+                      </div>
+                      <div className="flex items-center gap-2 font-mono text-[10px]">
+                        <span className="text-white">{dashboardColors.primary}</span>
+                        <input 
+                          type="color" 
+                          value={dashboardColors.primary}
+                          onChange={(e) => handleColorChange('primary', e.target.value)}
+                          className="w-8 h-8 rounded border-none bg-transparent cursor-pointer outline-none shrink-0"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Secondary Color */}
+                    <div className="p-3 bg-[#13072a]/70 border border-[#38166c]/30 rounded-xl flex items-center justify-between gap-3 hover:border-[#a200ff]/30 transition-all">
+                      <div className="space-y-0.5">
+                        <span className="text-xs font-bold text-white block">Color Secundario</span>
+                        <span className="text-[9px] text-[#a491bc] block font-medium">Gradientes secundarios de acción</span>
+                      </div>
+                      <div className="flex items-center gap-2 font-mono text-[10px]">
+                        <span className="text-white">{dashboardColors.secondary}</span>
+                        <input 
+                          type="color" 
+                          value={dashboardColors.secondary}
+                          onChange={(e) => handleColorChange('secondary', e.target.value)}
+                          className="w-8 h-8 rounded border-none bg-transparent cursor-pointer outline-none shrink-0"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Accent Color */}
+                    <div className="p-3 bg-[#13072a]/70 border border-[#38166c]/30 rounded-xl flex items-center justify-between gap-3 hover:border-[#a200ff]/30 transition-all">
+                      <div className="space-y-0.5">
+                        <span className="text-xs font-bold text-white block">Acento de Neón</span>
+                        <span className="text-[9px] text-[#a491bc] block font-medium">Bordes activos y tags</span>
+                      </div>
+                      <div className="flex items-center gap-2 font-mono text-[10px]">
+                        <span className="text-white">{dashboardColors.accent}</span>
+                        <input 
+                          type="color" 
+                          value={dashboardColors.accent}
+                          onChange={(e) => handleColorChange('accent', e.target.value)}
+                          className="w-8 h-8 rounded border-none bg-transparent cursor-pointer outline-none shrink-0"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Text Main */}
+                    <div className="p-3 bg-[#13072a]/70 border border-[#38166c]/30 rounded-xl flex items-center justify-between gap-3 hover:border-[#a200ff]/30 transition-all">
+                      <div className="space-y-0.5">
+                        <span className="text-xs font-bold text-white block">Texto Principal</span>
+                        <span className="text-[9px] text-[#a491bc] block font-medium">Color de títulos e inputs</span>
+                      </div>
+                      <div className="flex items-center gap-2 font-mono text-[10px]">
+                        <span className="text-white">{dashboardColors.textMain}</span>
+                        <input 
+                          type="color" 
+                          value={dashboardColors.textMain}
+                          onChange={(e) => handleColorChange('textMain', e.target.value)}
+                          className="w-8 h-8 rounded border-none bg-transparent cursor-pointer outline-none shrink-0"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Text Muted */}
+                    <div className="p-3 bg-[#13072a]/70 border border-[#38166c]/30 rounded-xl flex items-center justify-between gap-3 hover:border-[#a200ff]/30 transition-all">
+                      <div className="space-y-0.5">
+                        <span className="text-xs font-bold text-white block">Texto Secundario (Muted)</span>
+                        <span className="text-[9px] text-[#a491bc] block font-medium">Subtítulos e indicadores</span>
+                      </div>
+                      <div className="flex items-center gap-2 font-mono text-[10px]">
+                        <span className="text-white">{dashboardColors.textMuted}</span>
+                        <input 
+                          type="color" 
+                          value={dashboardColors.textMuted}
+                          onChange={(e) => handleColorChange('textMuted', e.target.value)}
+                          className="w-8 h-8 rounded border-none bg-transparent cursor-pointer outline-none shrink-0"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Border Primary */}
+                    <div className="p-3 bg-[#13072a]/70 border border-[#38166c]/30 rounded-xl flex items-center justify-between gap-3 hover:border-[#a200ff]/30 transition-all">
+                      <div className="space-y-0.5">
+                        <span className="text-xs font-bold text-white block">Borde Purpura / Principal</span>
+                        <span className="text-[9px] text-[#a491bc] block font-medium">Bordes resplandecientes primarios</span>
+                      </div>
+                      <div className="flex items-center gap-2 font-mono text-[10px]">
+                        <span className="text-white">{dashboardColors.borderPrimary}</span>
+                        <input 
+                          type="color" 
+                          value={dashboardColors.borderPrimary.startsWith('rgba') ? '#8100ff' : dashboardColors.borderPrimary}
+                          onChange={(e) => handleColorChange('borderPrimary', e.target.value)}
+                          className="w-8 h-8 rounded border-none bg-transparent cursor-pointer outline-none shrink-0"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Border Secondary */}
+                    <div className="p-3 bg-[#13072a]/70 border border-[#38166c]/30 rounded-xl flex items-center justify-between gap-3 hover:border-[#a200ff]/30 transition-all">
+                      <div className="space-y-0.5">
+                        <span className="text-xs font-bold text-white block">Borde Rosado / Secundario</span>
+                        <span className="text-[9px] text-[#a491bc] block font-medium">Bordes resplandecientes secundarios</span>
+                      </div>
+                      <div className="flex items-center gap-2 font-mono text-[10px]">
+                        <span className="text-white">{dashboardColors.borderSecondary}</span>
+                        <input 
+                          type="color" 
+                          value={dashboardColors.borderSecondary.startsWith('rgba') ? '#ff0080' : dashboardColors.borderSecondary}
+                          onChange={(e) => handleColorChange('borderSecondary', e.target.value)}
+                          className="w-8 h-8 rounded border-none bg-transparent cursor-pointer outline-none shrink-0"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Card Background Color - Solid / Semi-translucent */}
+                    <div className="p-3 bg-[#13072a]/70 border border-[#38166c]/30 rounded-xl flex items-center justify-between gap-3 max-w-none hover:border-[#a200ff]/30 transition-all">
+                      <div className="space-y-0.5">
+                        <span className="text-xs font-bold text-white block">Fondo de Vidrios / Cards</span>
+                        <span className="text-[9px] text-[#a491bc] block font-medium">Color de fondo translúcido</span>
+                      </div>
+                      <div className="flex items-center gap-2 font-mono text-[10px]">
+                        <span className="text-white">{dashboardColors.cardBg}</span>
+                        <input 
+                          type="color" 
+                          value={dashboardColors.cardBg.startsWith('rgba') ? '#120924' : dashboardColors.cardBg}
+                          onChange={(e) => handleColorChange('cardBg', e.target.value)}
+                          className="w-8 h-8 rounded border-none bg-transparent cursor-pointer outline-none shrink-0"
+                        />
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+
+                <div className="bg-[#120727] border border-[#a200ff]/15 p-3 rounded-xl text-[10px] text-[#a491bc] leading-relaxed mt-4">
+                  <strong className="text-white font-display uppercase tracking-wide block mb-1">👑 Privilegios de Administrador:</strong>
+                  <p>Cualquier cambio de color realizado aquí se propaga vía <strong>CSS variables</strong> instantáneamente a todo el ecosistema (paneles de vecindario, aliados y tracking).</p>
+                </div>
+              </div>
+            ) : activeRole === 'aliado' ? (
               <div className="p-5 space-y-5">
                 <div className="flex items-center justify-between border-b border-[#38166c]/30 pb-3.5">
                   <div>
