@@ -710,13 +710,13 @@ export default function App() {
         </div>
       )}
 
-      {/* Demo Multi-Role Simulator Toolbar - Styled as premium glass bar */}
-      <div className="bg-[#0e0e11]/90 border-b border-zinc-800 py-3.5 px-4 sticky top-0 z-40 shadow-[0_4px_30px_rgba(0,0,0,0.4)] backdrop-blur-md">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+      {/* Demo Multi-Role Simulator Toolbar - Floating Premium Capsule */}
+      <div className="max-w-[1400px] w-[calc(100%-2rem)] mx-auto mt-4 px-6 py-2.5 bg-zinc-950/80 border border-zinc-900 rounded-2xl sticky top-4 z-40 backdrop-blur-md flex flex-col md:flex-row items-center justify-between gap-3 shadow-[0_12px_45px_rgba(0,0,0,0.85)]">
+        <div className="w-full flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2.5">
-            <span className="w-2 h-2 rounded-full bg-[#e2ff3b] animate-ping"></span>
+            <span className="w-2 h-2 rounded-full bg-[#e2ff3b] animate-pulse"></span>
             <span className="text-[10px] uppercase font-mono font-black tracking-widest text-[#e2ff3b]/90">Consola Demo:</span>
-            <span className="text-xs text-gray-300 font-medium leading-none">Intercambia roles para probar Forcé Pulso desde cada perspectiva:</span>
+            <span className="text-xs text-zinc-300 font-medium leading-none">Prueba Forcé Pulso desde cada perspectiva:</span>
           </div>
           
           <div className="grid grid-cols-5 gap-1 w-full md:w-auto max-w-xl">
@@ -725,10 +725,10 @@ export default function App() {
                 setActiveRole('cliente');
                 triggerNotification("🛒 Sesión: Rol Cliente habilitado");
               }}
-              className={`py-2 px-2 text-[9px] tracking-wider uppercase font-black rounded-full transition-all duration-300 flex items-center justify-center gap-1 cursor-pointer ${
+              className={`py-1.5 px-2 text-[9px] tracking-wider uppercase font-black rounded-full transition-all duration-300 flex items-center justify-center gap-1 cursor-pointer ${
                 activeRole === 'cliente' 
                   ? 'bg-[#e2ff3b] text-black shadow-[0_0_15px_rgba(226,255,59,0.3)] border-transparent' 
-                  : 'bg-zinc-900 text-gray-400 hover:text-white hover:bg-zinc-800 border border-zinc-800'
+                  : 'bg-zinc-900 text-gray-400 hover:text-white hover:bg-zinc-850 border border-zinc-900'
               }`}
             >
               <span>🛒</span>
@@ -740,10 +740,10 @@ export default function App() {
                 setActiveRole('colaborador');
                 triggerNotification("📝 Sesión: Rol Colaborador (Vecino/Reportero) habilitado");
               }}
-              className={`py-2 px-2 text-[9px] tracking-wider uppercase font-black rounded-full transition-all duration-300 flex items-center justify-center gap-1 cursor-pointer ${
+              className={`py-1.5 px-2 text-[9px] tracking-wider uppercase font-black rounded-full transition-all duration-300 flex items-center justify-center gap-1 cursor-pointer ${
                 activeRole === 'colaborador' 
                   ? 'bg-[#e2ff3b] text-black shadow-[0_0_15px_rgba(226,255,59,0.3)] border-transparent' 
-                  : 'bg-zinc-900 text-gray-400 hover:text-white hover:bg-zinc-800 border border-zinc-800'
+                  : 'bg-zinc-900 text-gray-400 hover:text-white hover:bg-zinc-850 border border-zinc-900'
               }`}
             >
               <span>📝</span>
@@ -755,10 +755,10 @@ export default function App() {
                 setActiveRole('aliado');
                 triggerNotification("🏪 Sesión: Rol Aliado Comercial (Bodega) habilitado");
               }}
-              className={`py-2 px-2 text-[9px] tracking-wider uppercase font-black rounded-full transition-all duration-300 flex items-center justify-center gap-1 cursor-pointer ${
+              className={`py-1.5 px-2 text-[9px] tracking-wider uppercase font-black rounded-full transition-all duration-300 flex items-center justify-center gap-1 cursor-pointer ${
                 activeRole === 'aliado' 
                   ? 'bg-[#e2ff3b] text-black shadow-[0_0_15px_rgba(226,255,59,0.3)] border-transparent' 
-                  : 'bg-zinc-900 text-gray-400 hover:text-white hover:bg-zinc-800 border border-zinc-800'
+                  : 'bg-zinc-900 text-gray-400 hover:text-white hover:bg-zinc-850 border border-zinc-900'
               }`}
             >
               <span>🏪</span>
@@ -770,10 +770,10 @@ export default function App() {
                 setActiveRole('motorizado');
                 triggerNotification("🛵 Sesión: Rol Motorizado (Rider) habilitado");
               }}
-              className={`py-2 px-2 text-[9px] tracking-wider uppercase font-black rounded-full transition-all duration-300 flex items-center justify-center gap-1 cursor-pointer ${
+              className={`py-1.5 px-2 text-[9px] tracking-wider uppercase font-black rounded-full transition-all duration-300 flex items-center justify-center gap-1 cursor-pointer ${
                 activeRole === 'motorizado' 
                   ? 'bg-[#e2ff3b] text-black shadow-[0_0_15px_rgba(226,255,59,0.3)] border-transparent' 
-                  : 'bg-zinc-900 text-gray-400 hover:text-white hover:bg-zinc-800 border border-zinc-800'
+                  : 'bg-zinc-900 text-gray-400 hover:text-white hover:bg-zinc-850 border border-zinc-900'
               }`}
             >
               <span>🛵</span>
@@ -785,10 +785,10 @@ export default function App() {
                 setActiveRole('admin');
                 triggerNotification("⚙️ Sesión: Rol Administrador habilitado");
               }}
-              className={`py-2 px-2 text-[9px] tracking-wider uppercase font-black rounded-full transition-all duration-300 flex items-center justify-center gap-1 cursor-pointer ${
+              className={`py-1.5 px-2 text-[9px] tracking-wider uppercase font-black rounded-full transition-all duration-300 flex items-center justify-center gap-1 cursor-pointer ${
                 activeRole === 'admin' 
                   ? 'bg-[#e2ff3b] text-black shadow-[0_0_15px_rgba(226,255,59,0.3)] border-transparent' 
-                  : 'bg-zinc-900 text-gray-400 hover:text-white hover:bg-zinc-800 border border-zinc-800'
+                  : 'bg-zinc-900 text-gray-400 hover:text-white hover:bg-zinc-850 border border-zinc-900'
               }`}
             >
               <span>⚙️</span>
@@ -811,7 +811,7 @@ export default function App() {
         />
 
         {/* Center column: Interactive App Container */}
-        <main className="col-span-1 md:col-span-8 lg:col-span-6 w-full max-w-2xl mx-auto md:max-w-none md:mx-0 bg-black border border-zinc-800 rounded-[38px] shadow-[0_22px_65px_rgba(0,0,0,0.9),_0_0_2px_rgba(255,255,255,0.08)] relative overflow-hidden flex flex-col h-[750px] md:h-[820px] lg:h-[880px]">
+        <main className="col-span-1 md:col-span-8 lg:col-span-6 w-full max-w-2xl mx-auto md:max-w-none md:mx-0 bg-[#09090b] border border-zinc-900 rounded-[24px] shadow-[0_20px_50px_rgba(0,0,0,0.95),_0_0_2px_rgba(255,255,255,0.05)] relative overflow-hidden flex flex-col h-[750px] md:h-[820px] lg:h-[880px]">
           
           {/* Header Bar */}
           <header className="px-5 py-4 border-b border-zinc-900 bg-[#0c0c0e] flex items-center justify-between">
@@ -1900,17 +1900,17 @@ export default function App() {
               // STEP: Main product stream viewer
               <>
                 {/* View selectors: LISTA vs MAPA */}
-                <div className="px-5 py-4 border-b border-[#111] bg-[#0b0b0b] flex items-center justify-between gap-3">
+                <div className="px-5 py-4 border-b border-zinc-900 bg-[#0c0c0e] flex items-center justify-between gap-3">
                   
                   {/* Toggle buttons styled precisely as the reference video */}
-                  <div className="flex-1 grid grid-cols-2 gap-2 bg-[#121212] border border-[#222] p-1 rounded-xl">
+                  <div className="flex-1 grid grid-cols-2 gap-2 bg-zinc-950 border border-zinc-900 p-1 rounded-xl">
                     <button
                       type="button"
                       onClick={() => setActiveView('lista')}
-                      className={`py-2 px-3 text-xs font-bold rounded-lg flex items-center justify-center gap-2 transition-all cursor-pointer ${
+                      className={`py-1.5 px-3 text-xs font-bold rounded-lg flex items-center justify-center gap-2 transition-all cursor-pointer ${
                         activeView === 'lista'
-                          ? 'bg-emerald-600 text-black border-b-2 border-emerald-700 shadow-md'
-                          : 'text-[#888] hover:text-white'
+                          ? 'bg-[#e2ff3b] text-black shadow-sm'
+                          : 'text-zinc-500 hover:text-white'
                       }`}
                     >
                       <List className="w-4 h-4" />
@@ -1919,10 +1919,10 @@ export default function App() {
                     <button
                       type="button"
                       onClick={() => setActiveView('mapa')}
-                      className={`py-2 px-3 text-xs font-bold rounded-lg flex items-center justify-center gap-2 transition-all cursor-pointer ${
+                      className={`py-1.5 px-3 text-xs font-bold rounded-lg flex items-center justify-center gap-2 transition-all cursor-pointer ${
                         activeView === 'mapa'
-                          ? 'bg-emerald-600 text-black border-b-2 border-emerald-700 shadow-md'
-                          : 'text-[#888] hover:text-white'
+                          ? 'bg-[#e2ff3b] text-black shadow-sm'
+                          : 'text-zinc-500 hover:text-white'
                       }`}
                     >
                       <MapIcon className="w-4 h-4" />
@@ -1935,15 +1935,15 @@ export default function App() {
                     onClick={() => {
                       if (cart.length > 0) setIsCheckingOut(true);
                     }}
-                    className={`p-2.5 rounded-xl border transition-all flex items-center gap-2 cursor-pointer ${
+                    className={`p-2 rounded-xl border transition-all flex items-center gap-2 cursor-pointer ${
                       cart.length > 0 
-                        ? 'bg-emerald-950/20 border-emerald-500/50 text-white animate-pulse' 
-                        : 'bg-[#121212] border-[#222] text-[#555] opacity-50'
+                        ? 'bg-[#e2ff3b]/10 border-[#e2ff3b]/40 text-white shadow-[0_0_15px_rgba(226,255,59,0.1)]' 
+                        : 'bg-zinc-900 border-zinc-900 text-zinc-600 opacity-50'
                     }`}
                   >
                     <ShoppingBag className="w-4 h-4 shrink-0" />
                     {cart.length > 0 && (
-                      <span className="w-5 h-5 bg-emerald-500 text-black font-mono font-bold text-xs rounded-full flex items-center justify-center shrink-0">
+                      <span className="w-5 h-5 bg-[#e2ff3b] text-black font-mono font-bold text-xs rounded-full flex items-center justify-center shrink-0">
                         {cart.reduce((s, i) => s + i.quantity, 0)}
                       </span>
                     )}
@@ -1984,10 +1984,10 @@ export default function App() {
                         <button
                           key={cat}
                           onClick={() => setSelectedCategory(cat)}
-                          className={`py-1.5 px-3 rounded-lg border text-xs font-bold transition-all shrink-0 flex items-center gap-1.5 capitalize cursor-pointer ${
+                          className={`py-1.5 px-3.5 rounded-full border text-xs font-black tracking-wide transition-all shrink-0 flex items-center gap-1.5 capitalize cursor-pointer ${
                             isActive
-                              ? 'bg-[#1a1a1a] border-emerald-500 text-emerald-400 shadow-md'
-                              : 'bg-[#0f0f0f] border-[#222] text-[#888] hover:text-white'
+                              ? 'bg-[#e2ff3b] border-transparent text-black shadow-[0_4px_15px_rgba(226,255,59,0.3)]'
+                              : 'bg-zinc-900/60 border-zinc-850 text-zinc-400 hover:text-white hover:bg-zinc-800/80'
                           }`}
                         >
                           <span>{icon}</span>
@@ -2001,11 +2001,11 @@ export default function App() {
 
                 {/* STREAM AREA: LIST COMPONENT VIEW */}
                 {activeView === 'lista' ? (
-                  <div className="p-4 space-y-3 flex-1 overflow-y-auto">
+                  <div className="p-4 grid grid-cols-1 sm:grid-cols-2 gap-3.5 flex-1 overflow-y-auto align-start">
                     
                     {filteredProducts.length === 0 ? (
-                      <div className="py-12 text-center text-[#555] text-xs">
-                        <Info className="w-8 h-8 text-[#333] mx-auto mb-2" />
+                      <div className="col-span-1 sm:col-span-2 py-12 text-center text-zinc-600 text-xs">
+                        <Info className="w-8 h-8 text-zinc-700 mx-auto mb-2" />
                         <p>No se encontraron productos que coincidan</p>
                       </div>
                     ) : (
@@ -2013,38 +2013,46 @@ export default function App() {
                         <div
                           key={prod.id}
                           onClick={() => setSelectedProduct(prod)}
-                          className="bg-[#0b0b0b] hover:bg-[#121212] border border-[#222] hover:border-emerald-500/20 rounded-2xl p-4 flex justify-between items-center transition-all cursor-pointer group shadow-sm"
+                          className="bg-zinc-950/40 border border-zinc-900 hover:border-[#e2ff3b]/40 hover:bg-zinc-900/80 rounded-2xl p-4 flex flex-col justify-between h-[155px] transition-all duration-300 cursor-pointer group relative overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.5)]"
                         >
-                          <div className="flex items-center gap-3.5">
-                            {/* Icon block */}
-                            <span className="text-3xl p-2 bg-[#141414] group-hover:bg-[#181818] rounded-xl border border-[#222] transition-colors shrink-0">
+                          {/* Radial ambient glow in the card back */}
+                          <div className="absolute top-0 right-0 w-16 h-16 bg-[#e2ff3b]/2 rounded-full blur-xl group-hover:bg-[#e2ff3b]/5 transition-all"></div>
+
+                          {/* Top Row: Icon + status */}
+                          <div className="flex items-center justify-between">
+                            <span className="text-2xl p-1.5 bg-zinc-900 group-hover:bg-zinc-800 rounded-xl border border-zinc-850 transition-colors shrink-0">
                               {prod.icon}
                             </span>
-                            
-                            <div className="space-y-0.5">
-                              <h3 className="font-extrabold text-white text-sm lg:text-base leading-snug group-hover:text-emerald-400 transition-colors">
-                                {prod.name}
-                              </h3>
-                              <div className="flex items-center gap-1.5 text-[10px] text-[#666] font-medium">
-                                <span className="bg-[#121212] px-2 py-0.5 rounded border border-[#222] text-[#888]">
-                                  {prod.storesCount} tiendas
-                                </span>
-                                {prod.isNearSoldOut && (
-                                  <span className="text-orange-500 text-[9px] font-bold">● Casi agotado</span>
-                                )}
-                              </div>
+                            <div className="text-right">
+                              <span className="text-[9px] font-mono font-black uppercase text-zinc-500 block">
+                                {prod.storesCount} {prod.storesCount === 1 ? 'opción' : 'opciones'}
+                              </span>
+                              {prod.isNearSoldOut ? (
+                                <span className="text-orange-500 text-[8px] font-bold block mt-0.5 uppercase tracking-wider">▲ Escaso</span>
+                              ) : (
+                                <span className="text-[#e2ff3b] text-[8px] font-bold block mt-0.5 uppercase tracking-wider">● Stock</span>
+                              )}
                             </div>
                           </div>
 
-                          {/* Price range indicators */}
-                          <div className="text-right shrink-0">
-                            <span className="text-[10px] text-[#555] font-bold block">desde</span>
-                            <strong className="text-emerald-400 font-mono text-base font-extrabold">
-                              ${prod.minPrice.toFixed(2)}
-                            </strong>
-                            <span className="block text-[9px] font-mono text-[#444]">
-                              Bs.{(prod.minPrice * exchangeRate.rate).toFixed(1)}
-                            </span>
+                          {/* Middle Row: Name block */}
+                          <div className="mt-2.5">
+                            <h3 className="font-extrabold text-white text-xs lg:text-sm tracking-tight leading-snug group-hover:text-[#e2ff3b] transition-colors truncate">
+                              {prod.name}
+                            </h3>
+                          </div>
+
+                          {/* Bottom Row: Price display */}
+                          <div className="border-t border-zinc-900/80 pt-2 flex items-center justify-between">
+                            <span className="text-[9px] text-zinc-500 font-bold uppercase tracking-widest">Desde</span>
+                            <div className="text-right">
+                              <span className="text-[#e2ff3b] font-mono font-extrabold text-sm block">
+                                ${prod.minPrice.toFixed(2)}
+                              </span>
+                              <span className="text-[8px] font-mono text-zinc-600 block leading-none">
+                                Bs. {(prod.minPrice * exchangeRate.rate).toFixed(1)}
+                              </span>
+                            </div>
                           </div>
 
                         </div>
