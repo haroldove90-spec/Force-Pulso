@@ -26,7 +26,7 @@ export default function LeftSidebar({
   activeRole,
 }: LeftSidebarProps) {
   return (
-    <aside className="space-y-6 hidden md:block self-stretch">
+    <aside className="col-span-1 md:col-span-4 lg:col-span-3 space-y-6 hidden md:block self-stretch">
       {/* Logo & Platform Info Card with glowing neon border */}
       <div className="glass-panel purple-glow-border rounded-2xl p-6 relative overflow-hidden transition-all duration-300 hover:shadow-[0_0_20px_rgba(145,0,255,0.15)]">
         <div className="absolute top-0 right-0 w-36 h-36 bg-[#8100ff]/5 rounded-full blur-3xl -z-10"></div>

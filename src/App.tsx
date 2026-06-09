@@ -633,7 +633,7 @@ export default function App() {
         />
 
         {/* Center column: Interactive App Container */}
-        <main className="col-span-1 md:col-span-8 lg:col-span-6 w-full max-w-md md:max-w-none bg-[#0a0416]/95 border border-[#9100ff]/25 rounded-3xl shadow-[0_22px_60px_rgba(0,0,0,0.8),_0_0_25px_rgba(129,0,255,0.18)] relative overflow-hidden flex flex-col h-[750px] md:h-[820px] lg:h-[880px]">
+        <main className="col-span-1 md:col-span-8 lg:col-span-6 w-full max-w-2xl mx-auto md:max-w-none md:mx-0 bg-[#0a0416]/95 border border-[#9100ff]/25 rounded-3xl shadow-[0_22px_60px_rgba(0,0,0,0.8),_0_0_25px_rgba(129,0,255,0.18)] relative overflow-hidden flex flex-col h-[750px] md:h-[820px] lg:h-[880px]">
           
           {/* Header Bar */}
           <header className="px-5 py-4 border-b border-[#38166c]/30 bg-[#0c051a]/95 flex items-center justify-between">
