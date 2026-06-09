@@ -32,6 +32,8 @@ import {
 import { Product, Store, CartItem, ExchangeRate, MapPoint } from './types';
 import { INITIAL_PRODUCTS, STORES, INITIAL_STORE_PRICES, StoreDefinition } from './data';
 import { supabase } from './supabase';
+import LeftSidebar from './components/LeftSidebar';
+import RightSidebar from './components/RightSidebar';
 
 export default function App() {
   // Application state
@@ -535,23 +537,23 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#050505] text-[#ededed] font-sans flex flex-col antialiased">
+    <div className="min-h-screen bg-[#06020f] text-[#f1ecf9] font-sans flex flex-col antialiased">
       
-      {/* Floating Status / Toast notification for crowdsourcing actions */}
+      {/* Floating Status / Toast notification for crowdsourcing actions with intense glow */}
       {showRewardNotification && (
-        <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 bg-emerald-900 border border-emerald-500/50 px-6 py-3 rounded-full flex items-center gap-3 shadow-[0_0_25px_rgba(16,185,129,0.45)] animate-pulse text-sm max-w-sm text-center">
-          <Sparkles className="w-5 h-5 text-emerald-400 shrink-0" />
-          <span className="font-bold text-white text-xs">{showRewardNotification}</span>
+        <div className="fixed top-5 left-1/2 -translate-x-1/2 z-50 bg-[#16062b] border border-[#ff0080]/55 px-6 py-3.5 rounded-full flex items-center gap-2.5 shadow-[0_0_35px_rgba(255,0,128,0.5)] animate-bounce text-sm max-w-sm text-center">
+          <Sparkles className="w-5 h-5 text-pink-400 shrink-0" />
+          <span className="font-extrabold text-white text-xs tracking-wide uppercase font-display">{showRewardNotification}</span>
         </div>
       )}
 
-      {/* Demo Multi-Role Simulator Toolbar */}
-      <div className="bg-[#0b0b0b] border-b border-[#222] py-3.5 px-4 sticky top-0 z-40 shadow-xl backdrop-blur-md">
+      {/* Demo Multi-Role Simulator Toolbar - Styled as premium glass bar */}
+      <div className="bg-[#120924]/80 border-b border-[#9100ff]/20 py-3 px-4 sticky top-0 z-40 shadow-[0_4px_30px_rgba(0,0,0,0.3)] backdrop-blur-md">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2.5">
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping"></span>
-            <span className="text-[10px] uppercase font-mono font-bold tracking-widest text-[#777]">Demo Console:</span>
-            <span className="text-xs text-[#ccc] font-medium leading-none">Intercambia roles para probar Forcé Pulso desde cada perspectiva:</span>
+            <span className="w-2 h-2 rounded-full bg-pink-500 animate-ping"></span>
+            <span className="text-[10px] uppercase font-mono font-black tracking-widest text-pink-400/80">Demo Console:</span>
+            <span className="text-xs text-[#ebd3ff] font-medium leading-none">Intercambia roles para probar Forcé Pulso desde cada perspectiva:</span>
           </div>
           
           <div className="grid grid-cols-4 gap-1.5 w-full md:w-auto max-w-lg">
@@ -560,10 +562,10 @@ export default function App() {
                 setActiveRole('cliente');
                 triggerNotification("🛒 Sesión: Rol Cliente habilitado");
               }}
-              className={`py-2 px-3 text-[10px] tracking-wider uppercase font-black rounded-xl transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+              className={`py-2 px-3 text-[10px] tracking-wider uppercase font-black rounded-full transition-all duration-300 flex items-center justify-center gap-1.5 cursor-pointer ${
                 activeRole === 'cliente' 
-                  ? 'bg-emerald-600 text-black shadow-md shadow-emerald-500/25 font-black' 
-                  : 'bg-[#121212] text-[#888] hover:text-[#bbb] hover:bg-[#161616] border border-[#222]'
+                  ? 'bg-gradient-to-r from-[#8100ff] to-[#d6006e] text-white shadow-[0_0_15px_rgba(129,0,255,0.4)] border-transparent' 
+                  : 'bg-[#1b0d35]/65 text-[#a491bc] hover:text-white hover:bg-[#2c135c]/80 border border-[#38166c]/40'
               }`}
             >
               <span>🛒</span>
@@ -575,10 +577,10 @@ export default function App() {
                 setActiveRole('colaborador');
                 triggerNotification("📝 Sesión: Rol Colaborador (Vecino/Reportero) habilitado");
               }}
-              className={`py-2 px-3 text-[10px] tracking-wider uppercase font-black rounded-xl transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+              className={`py-2 px-3 text-[10px] tracking-wider uppercase font-black rounded-full transition-all duration-300 flex items-center justify-center gap-1.5 cursor-pointer ${
                 activeRole === 'colaborador' 
-                  ? 'bg-emerald-600 text-black shadow-md shadow-emerald-500/25 font-black' 
-                  : 'bg-[#121212] text-[#888] hover:text-[#bbb] hover:bg-[#161616] border border-[#222]'
+                  ? 'bg-gradient-to-r from-[#8100ff] to-[#d6006e] text-white shadow-[0_0_15px_rgba(129,0,255,0.4)] border-transparent' 
+                  : 'bg-[#1b0d35]/65 text-[#a491bc] hover:text-white hover:bg-[#2c135c]/80 border border-[#38166c]/40'
               }`}
             >
               <span>📝</span>
@@ -590,10 +592,10 @@ export default function App() {
                 setActiveRole('aliado');
                 triggerNotification("🏪 Sesión: Rol Aliado Comercial (Bodega) habilitado");
               }}
-              className={`py-2 px-3 text-[10px] tracking-wider uppercase font-black rounded-xl transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+              className={`py-2 px-3 text-[10px] tracking-wider uppercase font-black rounded-full transition-all duration-300 flex items-center justify-center gap-1.5 cursor-pointer ${
                 activeRole === 'aliado' 
-                  ? 'bg-emerald-600 text-black shadow-md shadow-emerald-500/25 font-black' 
-                  : 'bg-[#121212] text-[#888] hover:text-[#bbb] hover:bg-[#161616] border border-[#222]'
+                  ? 'bg-gradient-to-r from-[#8100ff] to-[#d6006e] text-white shadow-[0_0_15px_rgba(129,0,255,0.4)] border-transparent' 
+                  : 'bg-[#1b0d35]/65 text-[#a491bc] hover:text-white hover:bg-[#2c135c]/80 border border-[#38166c]/40'
               }`}
             >
               <span>🏪</span>
@@ -605,10 +607,10 @@ export default function App() {
                 setActiveRole('motorizado');
                 triggerNotification("🛵 Sesión: Rol Motorizado (Rider) habilitado");
               }}
-              className={`py-2 px-3 text-[10px] tracking-wider uppercase font-black rounded-xl transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+              className={`py-2 px-3 text-[10px] tracking-wider uppercase font-black rounded-full transition-all duration-300 flex items-center justify-center gap-1.5 cursor-pointer ${
                 activeRole === 'motorizado' 
-                  ? 'bg-emerald-600 text-black shadow-md shadow-emerald-500/25 font-black' 
-                  : 'bg-[#121212] text-[#888] hover:text-[#bbb] hover:bg-[#161616] border border-[#222]'
+                  ? 'bg-gradient-to-r from-[#8100ff] to-[#d6006e] text-white shadow-[0_0_15px_rgba(129,0,255,0.4)] border-transparent' 
+                  : 'bg-[#1b0d35]/65 text-[#a491bc] hover:text-white hover:bg-[#2c135c]/80 border border-[#38166c]/40'
               }`}
             >
               <span>🛵</span>
@@ -622,123 +624,45 @@ export default function App() {
       <div className="w-full max-w-7xl mx-auto px-4 py-8 grid grid-cols-1 md:grid-cols-12 gap-6 items-start flex-1">
         
         {/* Left column: Feed, info panel & collaborative network stats */}
-        <aside className="md:col-span-4 lg:col-span-3 space-y-6 hidden md:block self-stretch">
-          
-          {/* Logo & Platform Info */}
-          <div className="bg-[#0b0b0b] border border-[#222] rounded-2xl p-5 relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 rounded-full blur-3xl -z-10"></div>
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-8 h-8 rounded-lg bg-emerald-600 flex items-center justify-center font-bold text-white text-md shadow-md shadow-emerald-900/40">
-                F
-              </div>
-              <div>
-                <span className="font-extrabold tracking-tight text-white block">FORCÉ PULSO</span>
-                <span className="text-[10px] uppercase text-[#777] font-semibold tracking-wider">San Felipe, Venezuela</span>
-              </div>
-            </div>
-            <p className="text-xs text-[#999] leading-relaxed">
-              Monitoreo colaborativo en tiempo real. Compara precios en bodegas, abastos y supermercados locales de Yaracuy para ahorrar en cada compra.
-            </p>
-            <div className="mt-4 pt-4 border-t border-[#1c1c1c] flex items-center justify-between">
-              <span className="text-xs text-[#555] font-semibold">Tasa Activa</span>
-              <span className="text-xs text-[#999] bg-[#141414] px-2 py-1 rounded border border-[#222]">
-                1 USD = <strong className="text-white">Bs. {exchangeRate.rate}</strong>
-              </span>
-            </div>
-          </div>
-
-          {/* Collaborative Wallet Stat Box */}
-          <div className="bg-[#0b0b0b] border border-[#222] rounded-2xl p-5">
-            <label className="text-[10px] uppercase tracking-widest text-[#555] font-bold block mb-2">Mi Cartera Colaboradora</label>
-            <div className="flex items-center gap-3">
-              <div className="p-3 bg-emerald-950/40 rounded-xl border border-emerald-500/30 text-emerald-400">
-                <Coins className="w-6 h-6" />
-              </div>
-              <div>
-                <div className="text-3xl font-mono font-bold text-white">
-                  ${userWallet.toFixed(2)}
-                </div>
-                <div className="text-[11px] text-[#777]">
-                  ≈ Bs. {(userWallet * exchangeRate.rate).toFixed(2)}
-                </div>
-              </div>
-            </div>
-            <p className="text-[11px] text-[#666] mt-3 italic leading-snug">
-              Saldo acumulado al avisar precios nuevos o ganar cashback. Úsalo como método de pago (Forcé Wallet).
-            </p>
-          </div>
-
-          {/* Crowd Activity Ticker */}
-          <div className="bg-[#0b0b0b] border border-[#222] rounded-2xl p-5 space-y-4">
-            <div className="flex justify-between items-center">
-              <label className="text-[10px] uppercase tracking-widest text-[#555] font-bold">Actividad en la Zona</label>
-              <div className="flex items-center gap-1.5 text-[9px] font-bold bg-emerald-500/10 text-emerald-500 px-2 py-0.5 rounded-full uppercase">
-                <Flame className="w-2.5 h-2.5 animate-pulse" />
-                <span>{reportsCount} Reportes</span>
-              </div>
-            </div>
-            
-            <div className="space-y-3 max-h-[280px] overflow-y-auto pr-1">
-              {crowdReports.map((report) => (
-                <div key={report.id} className="p-2.5 bg-[#121212] rounded-lg border border-[#222]/60 hover:border-emerald-500/20 transition-all text-xs">
-                  <div className="flex justify-between text-[#888] text-[10px] mb-1">
-                    <span className="font-medium text-[#bbb]">{report.user}</span>
-                    <span>{report.time}</span>
-                  </div>
-                  <div className="text-white font-medium mb-0.5">
-                    {report.product}
-                  </div>
-                  <div className="flex justify-between items-center text-[#999]">
-                    <span>{report.store}</span>
-                    <strong className="text-emerald-400 font-mono">${report.price.toFixed(2)}</strong>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Quick How-it-Works Help */}
-          <div className="p-4 bg-indigo-950/20 border border-indigo-500/20 rounded-xl text-xs space-y-2">
-            <div className="flex items-center gap-2 text-indigo-400 font-bold">
-              <Award className="w-4 h-4" />
-              <span>Gana por Ayudar</span>
-            </div>
-            <p className="text-[#888] leading-relaxed">
-              ¿Viste un precio diferente en la calle? Toca <strong>"Avisar Precio"</strong>, actualiza la información y gana <strong>+$0.10</strong> inmediatamente.
-            </p>
-          </div>
-
-        </aside>
+        <LeftSidebar 
+          userWallet={userWallet} 
+          exchangeRate={exchangeRate} 
+          reportsCount={reportsCount} 
+          crowdReports={crowdReports} 
+          activeRole={activeRole} 
+        />
 
         {/* Center column: Interactive App Container */}
-        <main className="col-span-1 md:col-span-8 lg:col-span-6 w-full max-w-md md:max-w-none bg-[#090909] border border-[#222] rounded-3xl shadow-2xl relative overflow-hidden flex flex-col h-[750px] md:h-[820px] lg:h-[880px]">
+        <main className="col-span-1 md:col-span-8 lg:col-span-6 w-full max-w-md md:max-w-none bg-[#0a0416]/95 border border-[#9100ff]/25 rounded-3xl shadow-[0_22px_60px_rgba(0,0,0,0.8),_0_0_25px_rgba(129,0,255,0.18)] relative overflow-hidden flex flex-col h-[750px] md:h-[820px] lg:h-[880px]">
           
           {/* Header Bar */}
-          <header className="px-5 py-4 border-b border-[#111] bg-[#0c0c0c] flex items-center justify-between">
+          <header className="px-5 py-4 border-b border-[#38166c]/30 bg-[#0c051a]/95 flex items-center justify-between">
             <div className="flex flex-col">
-              <span className="text-xs text-[#555] uppercase tracking-widest font-bold">Yaracuy</span>
-              <div className="flex items-center gap-1 text-white font-bold tracking-tight text-lg">
-                <StoreIcon className="w-4 h-4 text-emerald-500" />
-                <span>Forcé Pulso</span>
+              <span className="text-[10px] text-pink-400/80 uppercase tracking-widest font-extrabold font-display">Conexión Yaracuy</span>
+              <div className="flex items-center gap-1.5 text-white font-black tracking-tight text-lg">
+                <StoreIcon className="w-4.5 h-4.5 text-pink-500 animate-pulse" />
+                <span className="font-display tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-white via-[#e8d6ff] to-pink-300">FORCÉ PULSO</span>
               </div>
             </div>
 
             {/* Price section of S CALLE (Dólar paralelo Yaracuy) */}
-            <div className="bg-[#121212] border border-[#222] rounded-xl px-3 py-1.5 flex flex-col items-end text-right">
-              <span className="text-[9px] uppercase tracking-wider text-[#666] font-bold">💵 S CALLE</span>
+            <div className="bg-[#18082c] border border-[#ff0080]/20 rounded-xl px-3 py-1.5 flex flex-col items-end text-right shadow-[0_0_12px_rgba(255,0,128,0.1)]">
+              <span className="text-[9px] uppercase tracking-wider text-[#a491bc] font-extrabold flex items-center gap-1">
+                <span>⚡</span> S CALLE
+              </span>
               <div className="flex items-center gap-1">
-                <span className="text-sm font-bold font-mono text-white">Bs.{exchangeRate.rate.toFixed(2)}</span>
-                <span className="text-[10px] font-mono text-emerald-500 flex items-center">
+                <span className="text-sm font-black font-mono text-white">Bs. {exchangeRate.rate.toFixed(2)}</span>
+                <span className="text-[10px] font-mono text-pink-500 flex items-center font-bold">
                   <ArrowUp className="w-2.5 h-2.5" />
                   +{exchangeRate.change}
                 </span>
               </div>
-              <span className="text-[8px] text-[#444] font-medium mt-0.5">actualizado {exchangeRate.lastUpdated}</span>
+              <span className="text-[8px] text-[#a491bc]/50 font-medium mt-0.5">act. {exchangeRate.lastUpdated}</span>
             </div>
           </header>
 
           {/* Subheader context or title instruction */}
-          <div className="bg-emerald-950/35 border-b border-emerald-900/40 px-5 py-2 text-center text-[11px] font-semibold text-emerald-400 tracking-wide">
+          <div className="bg-[#140628] border-b border-[#ff0080]/15 px-5 py-2 text-center text-[10px] font-black text-pink-400 tracking-widest uppercase">
             {activeRole === 'aliado' ? (
               <span>🏪 PANEL DE REGISTRO COMERCIAL EN TIEMPO REAL</span>
             ) : activeRole === 'motorizado' ? (
@@ -753,48 +677,48 @@ export default function App() {
             
             {activeRole === 'aliado' ? (
               <div className="p-5 space-y-5">
-                <div className="flex items-center justify-between border-b border-[#222] pb-3.5">
+                <div className="flex items-center justify-between border-b border-[#38166c]/30 pb-3.5">
                   <div>
-                    <h3 className="text-sm font-black text-white uppercase tracking-wider flex items-center gap-2">
-                       <StoreIcon className="w-4 h-4 text-emerald-400" />
+                    <h3 className="text-sm font-black text-white uppercase tracking-wider flex items-center gap-2 font-display">
+                       <StoreIcon className="w-4 h-4 text-pink-400" />
                        <span>Panel de Aliado Comercial</span>
                     </h3>
-                    <p className="text-[10px] text-[#777] mt-0.5 font-medium">Control directo de tu tienda en Forcé Pulso</p>
+                    <p className="text-[10px] text-[#a491bc] mt-0.5 font-medium">Control directo de tu tienda en Forcé Pulso</p>
                   </div>
                   
                   <div>
                     <select 
                       value={selectedAliadoStoreId}
                       onChange={(e) => setSelectedAliadoStoreId(e.target.value)}
-                      className="bg-[#121212] border border-[#222] rounded-xl px-3 py-1.5 text-xs text-white uppercase font-bold outline-none cursor-pointer"
+                      className="bg-[#180a30] border border-[#a200ff]/25 rounded-xl px-3 py-1.5 text-xs text-[#ebd3ff] uppercase font-extrabold outline-none cursor-pointer focus:border-pink-500/50"
                     >
                       {Object.entries(STORES).map(([id, store]) => (
-                        <option key={id} value={id}>{store.name}</option>
+                        <option key={id} value={id} className="bg-[#180a30] text-white">{store.name}</option>
                       ))}
                     </select>
                   </div>
                 </div>
 
                 {/* Stats Block */}
-                <div className="grid grid-cols-3 gap-2 text-center">
-                  <div className="bg-[#0b0b0b] border border-[#222] p-2.5 rounded-xl">
-                    <span className="text-[9px] uppercase font-bold text-[#555] block mb-0.5">Ventas Hoy</span>
-                    <span className="text-xs font-mono font-bold text-white">4 Pedidos</span>
+                <div className="grid grid-cols-3 gap-2.5 text-center">
+                  <div className="bg-[#150a29]/80 border border-[#38166c]/40 p-3 rounded-xl shadow-[0_4px_12px_rgba(0,0,0,0.2)]">
+                    <span className="text-[9px] uppercase font-bold text-[#a491bc] block mb-0.5 font-display tracking-wider">Ventas Hoy</span>
+                    <span className="text-xs font-display font-black text-white">4 Pedidos</span>
                   </div>
-                  <div className="bg-[#0b0b0b] border border-[#222] p-2.5 rounded-xl">
-                    <span className="text-[9px] uppercase font-bold text-[#555] block mb-0.5">Ingresos Est.</span>
-                    <span className="text-xs font-mono font-bold text-emerald-400">$34.50</span>
+                  <div className="bg-[#150a29]/80 border border-[#38166c]/40 p-3 rounded-xl shadow-[0_4px_12px_rgba(0,0,0,0.2)]">
+                    <span className="text-[9px] uppercase font-bold text-[#a491bc] block mb-0.5 font-display tracking-wider">Ingresos Est.</span>
+                    <span className="text-xs font-display font-black text-pink-400">$34.50</span>
                   </div>
-                  <div className="bg-[#0b0b0b] border border-[#222] p-2.5 rounded-xl">
-                    <span className="text-[9px] uppercase font-bold text-[#555] block mb-0.5">Factor "CALLE"</span>
-                    <span className="text-xs font-mono font-bold text-indigo-400">Bs.{exchangeRate.rate}</span>
+                  <div className="bg-[#150a29]/80 border border-[#38166c]/40 p-3 rounded-xl shadow-[0_4px_12px_rgba(0,0,0,0.2)]">
+                    <span className="text-[9px] uppercase font-bold text-[#a491bc] block mb-0.5 font-display tracking-wider">Factor &ldquo;CALLE&rdquo;</span>
+                    <span className="text-xs font-mono font-bold text-[#c18aff]">Bs. {exchangeRate.rate}</span>
                   </div>
                 </div>
 
                 <div className="space-y-4">
                   <div className="flex justify-between items-center">
-                    <span className="text-[10px] uppercase font-bold tracking-widest text-[#555]">Inventario y Precios de la Tienda</span>
-                    <span className="text-[9px] text-[#888] italic">Actualiza precios en tiempo real</span>
+                    <span className="text-[10px] uppercase font-black tracking-widest text-[#a491bc] font-display">Inventario y Precios de la Tienda</span>
+                    <span className="text-[9px] text-[#ff0080]/80 italic font-semibold">Actualiza precios en tiempo real</span>
                   </div>
 
                   <div className="space-y-2 max-h-[380px] overflow-y-auto pr-1">
@@ -853,42 +777,42 @@ export default function App() {
                       };
 
                       return (
-                        <div key={prod.id} className="p-3 bg-[#0c0c0c] border border-[#222] rounded-xl flex items-center justify-between gap-3 hover:border-[#333] transition-colors">
+                        <div key={prod.id} className="p-3 bg-[#13072a]/70 border border-[#38166c]/30 rounded-xl flex items-center justify-between gap-3 hover:border-[#a200ff]/35 transition-all">
                           <div className="flex items-center gap-2.5">
-                            <span className="text-xl p-1 bg-[#141414] rounded-lg border border-[#222]">{prod.icon}</span>
+                            <span className="text-xl p-1 bg-[#180a30] rounded-lg border border-[#a200ff]/25">{prod.icon}</span>
                             <div>
-                              <h4 className="text-xs font-bold text-white">{prod.name}</h4>
+                              <h4 className="text-xs font-bold text-white font-display">{prod.name}</h4>
                               <div className="flex gap-2 items-center mt-1">
                                 <select 
                                   value={currentStockStatus}
                                   onChange={(e) => updateStorePriceAndStock(currentPrice, e.target.value)}
-                                  className="bg-[#121212] border border-[#222] text-[9px] font-bold py-0.5 px-1.5 rounded outline-none text-emerald-400 cursor-pointer"
+                                  className="bg-[#1a0c36] border border-[#38166c] text-[9px] font-black py-0.5 px-1.5 rounded outline-none text-pink-400 cursor-pointer focus:border-pink-500"
                                 >
-                                  <option value="DISPONIBLE">HAY STOCK</option>
-                                  <option value="POCAS UNIDADES">POCO STOCK</option>
-                                  <option value="AGOTADO">AGOTADO</option>
+                                  <option value="DISPONIBLE" className="bg-[#1a0c36] text-pink-400 font-bold">HAY STOCK</option>
+                                  <option value="POCAS UNIDADES" className="bg-[#1a0c36] text-[#c18aff] font-bold">POCO STOCK</option>
+                                  <option value="AGOTADO" className="bg-[#1a0c36] text-[#a491bc] font-bold">AGOTADO</option>
                                 </select>
                               </div>
                             </div>
                           </div>
 
                           {/* Price Adjusters */}
-                          <div className="flex items-center gap-2 bg-[#121212] border border-[#222] p-1.5 rounded-xl">
+                          <div className="flex items-center gap-2 bg-[#180a30] border border-[#38166c] p-1.5 rounded-xl">
                             <button 
                               type="button"
                               onClick={() => updateStorePriceAndStock(Math.max(0.1, currentPrice - 0.1), currentStockStatus)}
-                              className="w-6 h-6 rounded bg-[#222] flex items-center justify-center font-bold text-xs text-white hover:bg-red-850/20 hover:text-red-400 cursor-pointer"
+                              className="w-6 h-6 rounded bg-[#240e44]/80 flex items-center justify-center font-bold text-xs text-[#ebd3ff] hover:bg-pink-900/40 hover:text-white cursor-pointer transition-all"
                             >
                               -
                             </button>
                             <div className="text-center min-w-[55px]">
                               <span className="text-xs font-mono font-extrabold text-white block">${currentPrice.toFixed(2)}</span>
-                              <span className="text-[8px] font-mono text-[#555] block">Bs.{(currentPrice * exchangeRate.rate).toFixed(1)}</span>
+                              <span className="text-[8px] font-mono text-[#a491bc]/70 block">Bs. {(currentPrice * exchangeRate.rate).toFixed(1)}</span>
                             </div>
                             <button 
                               type="button"
                               onClick={() => updateStorePriceAndStock(currentPrice + 0.1, currentStockStatus)}
-                              className="w-6 h-6 rounded bg-[#222] flex items-center justify-center font-bold text-xs text-white hover:bg-emerald-950/20 hover:text-emerald-400 cursor-pointer"
+                              className="w-6 h-6 rounded bg-[#240e44]/80 flex items-center justify-center font-bold text-xs text-[#ebd3ff] hover:bg-[#8100ff]/40 hover:text-white cursor-pointer transition-all"
                             >
                               +
                             </button>
@@ -902,16 +826,16 @@ export default function App() {
             ) : activeRole === 'motorizado' ? (
               <div className="p-5 space-y-5 flex-1 flex flex-col justify-between">
                 <div className="space-y-4">
-                  <div className="flex items-center justify-between border-b border-[#222] pb-3.5">
+                  <div className="flex items-center justify-between border-b border-[#38166c]/30 pb-3.5">
                     <div>
-                      <h3 className="text-sm font-black text-white uppercase tracking-wider flex items-center gap-2">
+                      <h3 className="text-sm font-black text-white uppercase tracking-wider flex items-center gap-2 font-display">
                         <span>🛵</span>
                         <span>Consola del Motorizado (Rider)</span>
                       </h3>
-                      <p className="text-[10px] text-[#777] mt-0.5 font-medium">Acepta pedidos y gestiona el despacho Yaracuy</p>
+                      <p className="text-[10px] text-[#a491bc] mt-0.5 font-medium">Acepta pedidos y gestiona el despacho Yaracuy</p>
                     </div>
 
-                    <span className="px-2 py-0.5 bg-indigo-950 text-indigo-400 text-[9px] font-black uppercase rounded border border-indigo-500/20">
+                    <span className="px-2.5 py-0.5 bg-[#13072a] text-[#c18aff] text-[9px] font-black uppercase rounded border border-[#a200ff]/20 animate-pulse tracking-wide">
                       GPS ACTIVO
                     </span>
                   </div>
@@ -919,20 +843,20 @@ export default function App() {
                   {activeOrder ? (
                     <div className="space-y-4 text-xs">
                       {/* Active Delivery card details */}
-                      <div className="bg-[#0b0b0b] border border-indigo-500/25 p-4 rounded-2xl relative overflow-hidden space-y-3">
-                        <div className="absolute top-0 right-0 bg-indigo-600 text-black text-[9px] font-extrabold px-3 py-1 rounded-bl-xl uppercase tracking-widest">
+                      <div className="bg-[#100424]/90 border border-pink-500/25 p-4 rounded-2xl relative overflow-hidden space-y-3 shadow-lg">
+                        <div className="absolute top-0 right-0 bg-[#e60073] text-white text-[9px] font-extrabold px-3 py-1 rounded-bl-xl uppercase tracking-widest font-display">
                           {activeOrder.status}
                         </div>
 
                         <div className="space-y-1">
-                          <span className="text-[10px] font-bold text-indigo-400 block font-mono">{activeOrder.id}</span>
+                          <span className="text-[10px] font-bold text-[#c18aff] block font-mono">{activeOrder.id}</span>
                           <h4 className="text-xs font-bold text-white">Entrega en: Calle 3, Sector Plaza Yara, San Felipe</h4>
-                          <span className="text-[10px] text-[#555] block">
-                            Método de pago: <strong className="text-white uppercase font-mono">{activeOrder.paymentMethod}</strong> · Total: <strong className="text-emerald-400 font-mono">${activeOrder.totalUsd.toFixed(2)}</strong>
+                          <span className="text-[10px] text-[#a491bc] block">
+                            Método de pago: <strong className="text-white uppercase font-mono">{activeOrder.paymentMethod}</strong> · Total: <strong className="text-pink-400 font-mono font-bold">${activeOrder.totalUsd.toFixed(2)}</strong>
                           </span>
                         </div>
 
-                        <div className="border-t border-[#1c1c1c] pt-2 max-h-[140px] overflow-y-auto space-y-1 text-[#888]">
+                        <div className="border-t border-[#38166c]/20 pt-2 max-h-[140px] overflow-y-auto space-y-1 text-[#a491bc]">
                           {activeOrder.items.map((item, id) => (
                             <div key={id} className="flex justify-between">
                               <span>{item.quantity}x {item.product.name}</span>
@@ -944,8 +868,8 @@ export default function App() {
 
                       {/* Stepper control buttons */}
                       <div className="space-y-2">
-                        <label className="text-[10px] uppercase font-bold tracking-widest text-[#555]">PROGRESO DEL DELIVERY</label>
-                        <div className="grid grid-cols-2 gap-2 text-center text-xs">
+                        <label className="text-[10px] uppercase font-black tracking-widest text-[#a491bc] font-display">Progreso del Delivery</label>
+                        <div className="grid grid-cols-2 gap-2 text-center text-[10px]">
                           <button 
                             type="button"
                             disabled={activeOrder.status !== 'CREADO'}
@@ -955,12 +879,12 @@ export default function App() {
                                   supabase.from('orders').update({ status: 'ACEPTADO', step: 2 }).eq('id', curr.id).then(() => {});
                                   return { ...curr, status: 'ACEPTADO', step: 2 };
                                 }
-                                return null;
+                                  return null;
                               });
                               setOrderStep(2);
                               triggerNotification("🛵 ¡Órden aceptada! Rumbo a la tienda.");
                             }}
-                            className="py-3 px-2 rounded-xl bg-[#0c0c0c] border border-[#222]/50 hover:bg-indigo-950/20 hover:border-indigo-500/50 text-white disabled:opacity-40 disabled:pointer-events-none transition-all font-bold cursor-pointer"
+                            className="py-3 px-2 rounded-xl bg-[#180a30] border border-[#a200ff]/20 hover:bg-[#8100ff]/15 hover:border-[#ff0080]/50 text-white disabled:opacity-30 disabled:pointer-events-none transition-all font-bold cursor-pointer font-display uppercase tracking-wider"
                           >
                             🤝 Aceptar Órden
                           </button>
@@ -979,7 +903,7 @@ export default function App() {
                               setOrderStep(3);
                               triggerNotification("🛍️ Pedido retirado de la tienda. En tránsito.");
                             }}
-                            className="py-3 px-2 rounded-xl bg-[#0c0c0c] border border-[#222]/50 hover:bg-indigo-950/20 hover:border-indigo-500/50 text-white disabled:opacity-40 disabled:pointer-events-none transition-all font-bold cursor-pointer"
+                            className="py-3 px-2 rounded-xl bg-[#180a30] border border-[#a200ff]/20 hover:bg-[#8100ff]/15 hover:border-[#ff0080]/50 text-white disabled:opacity-30 disabled:pointer-events-none transition-all font-bold cursor-pointer font-display uppercase tracking-wider"
                           >
                             🛍️ Retirar de tienda
                           </button>
@@ -998,7 +922,7 @@ export default function App() {
                               setOrderStep(4);
                               triggerNotification("📍 En ruta al destino del cliente.");
                             }}
-                            className="py-3 px-2 rounded-xl bg-[#0c0c0c] border border-[#222]/50 hover:bg-indigo-950/20 hover:border-indigo-500/50 text-white disabled:opacity-40 disabled:pointer-events-none transition-all font-bold cursor-pointer"
+                            className="py-3 px-2 rounded-xl bg-[#180a30] border border-[#a200ff]/20 hover:bg-[#8100ff]/15 hover:border-[#ff0080]/50 text-white disabled:opacity-30 disabled:pointer-events-none transition-all font-bold cursor-pointer font-display uppercase tracking-wider"
                           >
                             🛣️ En ruta al cliente
                           </button>
@@ -1017,23 +941,23 @@ export default function App() {
                               setOrderStep(5);
                               triggerNotification("🎉 ¡Pedido entregado! Ecosistema completado.");
                             }}
-                            className="py-3 px-2 rounded-xl bg-[#0c0c0c] border border-[#222]/50 hover:bg-emerald-950/20 hover:border-emerald-500/50 text-emerald-400 disabled:opacity-40 disabled:pointer-events-none transition-all font-bold col-span-2 cursor-pointer"
+                            className="py-3 px-2 rounded-xl bg-gradient-to-r from-[#8100ff] to-[#d6006e] text-white hover:shadow-[0_0_15px_rgba(129,0,255,0.4)] disabled:opacity-30 disabled:pointer-events-none transition-all font-black col-span-2 cursor-pointer font-display uppercase tracking-widest text-[11px]"
                           >
                             🏁 Entregar Pedido
                           </button>
                         </div>
                       </div>
 
-                      <p className="text-[10px] text-[#555] leading-relaxed italic text-center">
+                      <p className="text-[10px] text-[#a491bc]/60 leading-relaxed italic text-center">
                         Pulsar los pasos anteriores actualizará inmediatamente la pantalla de tracking de entrega que recibe tu cliente en tiempo real.
                       </p>
                     </div>
                   ) : (
-                    <div className="py-12 px-4 text-center rounded-2xl bg-[#0b0b0b] border border-[#222] space-y-4 flex-1 flex flex-col justify-center items-center">
-                      <div className="text-3xl">📭</div>
+                    <div className="py-12 px-4 text-center rounded-2xl bg-[#14062a]/95 border border-[#a200ff]/20 space-y-4 flex-1 flex flex-col justify-center items-center shadow-lg">
+                      <div className="text-4xl animate-bounce">📭</div>
                       <div className="space-y-1">
-                        <h4 className="text-xs font-bold text-white">Sin Pedidos Asignados</h4>
-                        <p className="text-[11px] text-[#666] leading-relaxed max-w-sm mx-auto text-xs">
+                        <h4 className="text-xs font-bold font-display uppercase text-white tracking-wider">Sin Pedidos Asignados</h4>
+                        <p className="text-[10px] text-[#a491bc] leading-relaxed max-w-sm mx-auto">
                           No hay solicitudes de delivery activas de clientes en San Felipe en este momento.
                         </p>
                       </div>
@@ -1072,20 +996,20 @@ export default function App() {
                           setOrderStep(1);
                           triggerNotification("🔔 ¡Nueva órden simulada recibida!");
                         }}
-                        className="px-4 py-2 bg-indigo-600 hover:bg-indigo-550 text-white font-extrabold text-[10px] tracking-wider uppercase rounded-lg transition-all cursor-pointer"
+                        className="px-5 py-3 bg-gradient-to-r from-[#8100ff] to-[#d6006e] hover:brightness-110 text-white font-extrabold text-[9px] tracking-widest uppercase rounded-full transition-all cursor-pointer shadow-[0_4px_15px_rgba(129,0,255,0.4)]"
                       >
-                        Crear pedido de prueba instantneo
+                        Crear pedido de prueba instantáneo
                       </button>
                     </div>
                   )}
                 </div>
 
-                <div className="bg-[#0b0b0b] border border-white/5 p-3 rounded-lg text-[10px] text-[#666] leading-relaxed">
-                  <strong>💡 Cómo Probar el Ciclo Completo:</strong>
+                <div className="bg-[#120727] border border-[#a200ff]/15 p-3 rounded-xl text-[10px] text-[#a491bc] leading-relaxed">
+                  <strong className="text-white font-display uppercase tracking-wide block mb-1">💡 Cómo Probar el Ciclo Completo:</strong>
                   <ul className="list-disc pl-4 mt-1 space-y-1">
-                    <li>Paso 1: Ve a <strong>"Cliente"</strong>, agrega algo al carrito y haz el checkout.</li>
-                    <li>Paso 2: Ve a <strong>"Motorizado"</strong> para aceptar, retirar y entregar el pedido.</li>
-                    <li>Paso 3: Vuelves a <strong>"Cliente"</strong> y verás el tracking actualizado en vivo.</li>
+                    <li>Paso 1: Ve a <strong className="text-white">"Cliente"</strong>, agrega algo al carrito y haz el checkout.</li>
+                    <li>Paso 2: Ve a <strong className="text-white">"Rider"</strong> para aceptar, retirar y entregar el pedido.</li>
+                    <li>Paso 3: Vuelves a <strong className="text-white">"Cliente"</strong> y verás el tracking actualizado en vivo.</li>
                   </ul>
                 </div>
               </div>
@@ -1849,7 +1773,7 @@ export default function App() {
                       triggerNotification('🛒 Agrega productos primero para ver el carrito');
                     }
                   }}
-                  className="text-[10px] tracking-wider uppercase font-black text-emerald-400 hover:text-emerald-300 transition-colors cursor-pointer"
+                  className="text-[10px] tracking-wider uppercase font-black text-pink-400 hover:text-pink-300 transition-colors cursor-pointer"
                 >
                   Ver Carrito ({cart.reduce((s, i) => s + i.quantity, 0)}) →
                 </button>
@@ -1860,140 +1784,21 @@ export default function App() {
         </main>
 
         {/* Right column: Instructions, Community reports & collaborative widget */}
-        <aside className="col-span-1 md:col-span-12 lg:col-span-3 grid grid-cols-1 md:grid-cols-2 lg:flex lg:flex-col gap-6 self-stretch">
-          
-          {/* Siete Calles Average Pricing info panel */}
-          <div className="bg-[#0b0b0b] border border-[#222] rounded-2xl p-5 space-y-3">
-            <h3 className="font-bold text-white text-xs lg:text-sm tracking-tight flex items-center gap-2">
-              <TrendingUp className="w-4 h-4 text-emerald-500" />
-              <span>Análisis de Precios Paralelos</span>
-            </h3>
-            <p className="text-xs text-[#999] leading-relaxed">
-              La moneda se devalúa constantemente, por lo que actualizamos el factor <strong>S CALLE</strong> de Yaracuy 24/7.
-            </p>
-            <div className="space-y-2 border-t border-[#1c1c1c] pt-3 text-xs">
-              <div className="flex justify-between font-mono">
-                <span className="text-[#666]">Promedio Semana</span>
-                <span className="text-white">Bs. 38.30</span>
-              </div>
-              <div className="flex justify-between font-mono">
-                <span className="text-[#666]">Máximo Registrado</span>
-                <span className="text-white text-orange-400">Bs. 38.65</span>
-              </div>
-              <div className="flex justify-between font-mono">
-                <span className="text-[#666]">Desviación Estándar</span>
-                <span className="text-emerald-500">± 0.2%</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Crowdsourced reporting form inside sidebar box */}
-          {reportingProduct ? (
-            <div className="bg-emerald-950/20 border border-emerald-500/35 rounded-2xl p-5 space-y-4 animate-fadeIn">
-              <div className="flex justify-between items-center">
-                <h3 className="font-extrabold text-[#fff] text-xs lg:text-sm tracking-tight flex items-center gap-2">
-                  <Coins className="w-4 h-4 text-emerald-400" />
-                  <span>Avisar Precio</span>
-                </h3>
-                <button 
-                  onClick={() => setReportingProduct(null)}
-                  className="p-1 rounded bg-[#222]/30 text-[#888] hover:text-white"
-                >
-                  <X className="w-3.5 h-3.5" />
-                </button>
-              </div>
-
-              <form onSubmit={handlePostReport} className="space-y-3 text-xs">
-                <div>
-                  <label className="text-[10px] text-[#999] font-medium block mb-1">Carga de Producto:</label>
-                  <div className="bg-black/40 px-3 py-2 rounded-lg border border-[#222] text-white font-semibold">
-                    {reportingProduct.icon} {reportingProduct.name}
-                  </div>
-                </div>
-
-                <div>
-                  <label className="text-[10px] text-[#999] font-medium block mb-1">📍 Selecciona Comercio:</label>
-                  <select 
-                    value={reportingStoreId}
-                    onChange={(e) => setReportingStoreId(e.target.value)}
-                    className="w-full bg-black/40 border border-[#222] rounded-lg p-2 text-white outline-none focus:border-emerald-500/50"
-                  >
-                    {Object.values(STORES).map((store) => (
-                      <option key={store.id} value={store.id}>
-                        {store.name} ({store.distance})
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                <div className="grid grid-cols-2 gap-2">
-                  <div>
-                    <label className="text-[10px] text-[#999] font-medium block mb-1">Precio en USD ($):</label>
-                    <input 
-                      type="number"
-                      step="0.01"
-                      placeholder="1.95"
-                      required
-                      value={reportingPrice}
-                      onChange={(e) => setReportingPrice(e.target.value)}
-                      className="w-full bg-black/40 border border-[#222] focus:border-emerald-500/50 rounded-lg p-2 text-white font-mono outline-none"
-                    />
-                  </div>
-                  <div>
-                    <label className="text-[10px] text-[#999] font-medium block mb-1">Disponibilidad:</label>
-                    <select 
-                      value={reportingStockStatus}
-                      onChange={(e) => setReportingStockStatus(e.target.value as any)}
-                      className="w-full bg-black/40 border border-[#222] rounded-lg p-2 text-white outline-none"
-                    >
-                      <option value="DISPONIBLE">Hay bastante</option>
-                      <option value="POCAS UNIDADES">Pocas unidades</option>
-                      <option value="AGOTADO">Agotado total</option>
-                    </select>
-                  </div>
-                </div>
-
-                {reportingStockStatus === 'POCAS UNIDADES' && (
-                  <div>
-                    <label className="text-[10px] text-[#999] font-medium block mb-1">Unidades estimadas:</label>
-                    <input 
-                      type="number"
-                      placeholder="9"
-                      value={reportingStockCount}
-                      onChange={(e) => setReportingStockCount(e.target.value)}
-                      className="w-full bg-black/40 border border-[#222] focus:border-emerald-500/50 rounded-lg p-2 text-white font-mono outline-none"
-                    />
-                  </div>
-                )}
-
-                <button
-                  type="submit"
-                  className="w-full py-2.5 bg-emerald-600 hover:bg-emerald-550 text-black font-extrabold text-[10px] uppercase tracking-wider rounded-lg transition-all cursor-pointer"
-                >
-                  Enviar Reporte & Ganar $0.10
-                </button>
-              </form>
-            </div>
-          ) : (
-            <div className="bg-[#0b0b0b] border border-[#222] rounded-2xl p-5 text-center flex flex-col items-center justify-center space-y-4">
-              <div className="w-12 h-12 rounded-full bg-[#121212] flex items-center justify-center text-xl shadow-inner border border-[#222]">
-                💬
-              </div>
-              <div className="space-y-1">
-                <h4 className="font-bold text-white text-xs lg:text-sm">¿Dudas de un precio?</h4>
-                <p className="text-xs text-[#666] leading-relaxed max-w-xs mx-auto">
-                  Selecciona cualquier producto y avisa si el precio ha variado. El resto de la comunidad de San Felipe te lo agradecerá.
-                </p>
-              </div>
-            </div>
-          )}
-
-          {/* Quick legal stats footnote */}
-          <div className="text-[10px] text-[#444] text-center italic hover:text-[#555] transition-colors leading-normal pt-4 col-span-1 md:col-span-2 lg:col-span-1">
-            Forcé Yaracuy Applet v3.3.877373 © 2026. Todos los derechos reservados. No afiliado directa ni indirectamente con organismos estatales venezolanos.
-          </div>
-
-        </aside>
+        <RightSidebar 
+          reportingProduct={reportingProduct}
+          setReportingProduct={setReportingProduct}
+          reportingPrice={reportingPrice}
+          setReportingPrice={setReportingPrice}
+          reportingStoreId={reportingStoreId}
+          setReportingStoreId={setReportingStoreId}
+          reportingStockStatus={reportingStockStatus}
+          setReportingStockStatus={setReportingStockStatus}
+          reportingStockCount={reportingStockCount}
+          setReportingStockCount={setReportingStockCount}
+          handlePostReport={handlePostReport}
+          storesList={Object.values(STORES)}
+          exchangeRate={exchangeRate}
+        />
 
       </div>
 
